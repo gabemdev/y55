@@ -1,0 +1,25 @@
+//
+//  Y55-Prefix.pch
+//  Y55
+//
+//  Created by Rockstar. on 11/26/14.
+//  Copyright (c) 2014 Gabe Morales. All rights reserved.
+//
+
+@import Darwin.Availability;
+
+#ifndef __IPHONE_7_0
+#warning "This project uses features only available in iOS SDK 7.0 and later."
+#endif
+
+#ifdef __OBJC__
+@import UIKit;
+@import Foundation;
+#endif
+
+#import "Y55Kit.h"
+#import <TwitterKit/TwitterKit.h>
+#import <Accounts/Accounts.h>
+#import <Twitter/Twitter.h>
+#import "LoginViewController.h"
+#import "AppDelegate.h"
