@@ -7,11 +7,12 @@
 //
 
 #import "ProfileViewController.h"
+#import "TwitterProfile.h"
 
 @interface ProfileViewController ()
 
 @property (nonatomic, readonly) UIScrollView *scrollView;
-@property (atomic, strong) ACAccount *twitterAccount;
+@property (atomic, strong) TwitterProfile *profile;
 
 @end
 
@@ -48,8 +49,7 @@
         [_nameLabel setTextColor:[UIColor y55_textColor]];
         [_nameLabel setTextAlignment:NSTextAlignmentCenter];
         [_nameLabel setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
-//        [_nameLabel setBackgroundColor:[UIColor redColor]];
-        [_nameLabel setText:@""];
+        [_nameLabel setText:@"Name"];
     }
     return _nameLabel;
 }
@@ -65,6 +65,7 @@
         [_aboutLabel setTextAlignment:NSTextAlignmentCenter];
         [_aboutLabel setScrollEnabled:YES];
         [_aboutLabel setScrollsToTop:YES];
+        [_aboutLabel setText:@"Description"];
 //        [_aboutLabel setBackgroundColor:[UIColor blueColor]];
     }
     return _aboutLabel;
@@ -117,13 +118,22 @@
     [_scrollView addSubview:self.logoutButton];
     [self setupViewConstraints];
     
-    [self getTwitterInfo];
+//    [self getTwitterInfo];
+    [self loadSocialInfo];
+    [self getProfileInfo];
+    
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self getTwitterInfo];
+    [self loadSocialInfo];
+    [self getProfileInfo];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -132,13 +142,29 @@
 }
 
 
+
 #pragma mark - Social
-- (void)getTwitterInfo{
+
+-(void)loadSocialInfo {
     TWTRSession *session = [[Twitter sharedInstance] session];
     [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
         if (user) {
-            NSString *profileImageUrl = [user profileImageLargeURL];
+            NSString *imageString = [user profileImageLargeURL];
+            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
+            UIImage *image = [UIImage imageWithData:imageData];
+            [_profileImage setImage:image];
             
+            [_nameLabel setText:[user name]];
+            [self.navigationItem setTitle:[user name]];
+            
+        }
+    }];
+}
+
+- (void)getProfileInfo{
+    TWTRSession *session = [[Twitter sharedInstance] session];
+    [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
+        if (user) {
             NSString *userString = @"https://api.twitter.com/1.1/users/show.json";
             NSDictionary* params = @{@"screen_name" : [user screenName]};
             NSError *error;
@@ -149,30 +175,31 @@
             
             if (request) {
                 [[[Twitter sharedInstance] APIClient] sendTwitterRequest:request
-                                                              completion:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                                                                  if (data) {
-                                                                      NSError *jsonError;
-                                                                      NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
-                                                                                                                           options:0
-                                                                                                                             error:&jsonError];
-                                                                      dispatch_async(dispatch_get_main_queue(), ^{
-                                                                          NSLog(@"%@", json);
-                                                                          NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:profileImageUrl]];
-                                                                          UIImage *image = [UIImage imageWithData:imageData];
-                                                                          [_profileImage setImage:image];
-                                                                          
-                                                                          [_nameLabel setText:[json objectForKey:@"name"]];
-                                                                          [_aboutLabel setText:[json objectForKey:@"description"]];
-                                                                      });
-                                                                  }
-                                                                  
-                                                                  else {
-                                                                      NSLog(@"Error: %@", connectionError);
-                                                                  }
-                                                              }];
+                                                              completion:^(NSURLResponse *response,
+                                                                           NSData *data, NSError *connectionError) {
+                      if (data) {
+                          NSError *jsonError;
+                          NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
+                                                                               options:0
+                                                                                 error:&jsonError];
+                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//                              NSLog(@"%@", json);
+//                              NSString *profileImageUrl = [user profileImageLargeURL];
+//                              NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:profileImageUrl]];
+//                              UIImage *image = [UIImage imageWithData:imageData];
+                              
+                              dispatch_async(dispatch_get_main_queue(), ^{
+//                              [_profileImage setImage:image];
+//                              [_nameLabel setText:[json objectForKey:@"name"]];
+                              [_aboutLabel setText:[json objectForKey:@"description"]];
+                              });
+                          });
+                      }
+                      else {
+                          NSLog(@"Error: %@", connectionError);
+                      }
+                  }];
             }
-            
-            
             else {
                 NSLog(@"Error: %@", error);
             }
@@ -180,8 +207,16 @@
             NSLog(@"Error: %@", error);
         }
     }];
+    
+    
+    
 }
 
+- (void)twitterProfileReceived:(NSDictionary *)jsonResponse {
+    self.profile = [[TwitterProfile alloc] initWithJSON:jsonResponse];
+    [_nameLabel setText:[self.profile name]];
+    [_aboutLabel setText:[self.profile descriptionLabel]];
+}
 
 //- (void)loadInfoWithSession:(TWTRSession *)session {
 //    [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
@@ -316,7 +351,8 @@
 
 - (void)logout:(id)sender {
     [[Twitter sharedInstance] logOut];
-    [self signOut:nil];
+    [TwitterKit logOut];
+     [self signOut:nil];
     
 }
 
@@ -324,16 +360,18 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign Out" message:@"Are you sure you want to sign out of Hipster" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Sign Out", nil];
     [alert show];
     
+    
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex !=1) {
         return;
     }
-    [[Twitter sharedInstance] logOut];
-    _profileImage.image = [UIImage imageNamed:@"placeholder"];
+    [self.navigationItem setTitle:@""];
+    _profileImage.image = [UIImage new];
     _nameLabel.text = @"Name";
     _aboutLabel.text = @"Description";
+    
     AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
     appDelegate.window.rootViewController = nav;

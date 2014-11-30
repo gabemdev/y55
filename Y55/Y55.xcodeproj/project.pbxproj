@@ -33,6 +33,14 @@
 		6D5233B81A26DB7B008B4C9B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233B71A26DB7B008B4C9B /* ProfileViewController.m */; };
 		6D5233BB1A26DB90008B4C9B /* AdvicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233BA1A26DB90008B4C9B /* AdvicesViewController.m */; };
 		6D5233C01A295695008B4C9B /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5233BF1A295695008B4C9B /* Social.framework */; };
+		6D5233C41A2A99BC008B4C9B /* TwitterProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233C31A2A99BC008B4C9B /* TwitterProfile.m */; };
+		6D5233C71A2AA060008B4C9B /* TwitterAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233C61A2AA060008B4C9B /* TwitterAdapter.m */; };
+		6D5233CC1A2AB270008B4C9B /* ProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D5233C91A2AB270008B4C9B /* ProgressHUD.bundle */; };
+		6D5233CD1A2AB270008B4C9B /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233CB1A2AB270008B4C9B /* ProgressHUD.m */; };
+		6D6040041A2BD850001F2C35 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6040031A2BD850001F2C35 /* FacebookSDK.framework */; };
+		6DD84BF21A2BCBB200D7B5F6 /* GMHUDWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */; };
+		6DD84BF31A2BCBB200D7B5F6 /* GMHUDWindowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */; };
+		6DD84BF61A2BCC0600D7B5F6 /* GMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF51A2BCC0600D7B5F6 /* GMHudView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +98,20 @@
 		6D5233B91A26DB90008B4C9B /* AdvicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdvicesViewController.h; path = Classes/AdvicesViewController.h; sourceTree = "<group>"; };
 		6D5233BA1A26DB90008B4C9B /* AdvicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AdvicesViewController.m; path = Classes/AdvicesViewController.m; sourceTree = "<group>"; };
 		6D5233BF1A295695008B4C9B /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		6D5233C21A2A99BC008B4C9B /* TwitterProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterProfile.h; path = Y55Kit/Classes/TwitterProfile.h; sourceTree = "<group>"; };
+		6D5233C31A2A99BC008B4C9B /* TwitterProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterProfile.m; path = Y55Kit/Classes/TwitterProfile.m; sourceTree = "<group>"; };
+		6D5233C51A2AA060008B4C9B /* TwitterAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TwitterAdapter.h; path = Y55Kit/Classes/TwitterAdapter.h; sourceTree = "<group>"; };
+		6D5233C61A2AA060008B4C9B /* TwitterAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TwitterAdapter.m; path = Y55Kit/Classes/TwitterAdapter.m; sourceTree = "<group>"; };
+		6D5233C91A2AB270008B4C9B /* ProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ProgressHUD.bundle; sourceTree = "<group>"; };
+		6D5233CA1A2AB270008B4C9B /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
+		6D5233CB1A2AB270008B4C9B /* ProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressHUD.m; sourceTree = "<group>"; };
+		6D6040031A2BD850001F2C35 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		6DD84BEE1A2BCBB200D7B5F6 /* GMHUDWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHUDWindow.h; sourceTree = "<group>"; };
+		6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMHUDWindow.m; sourceTree = "<group>"; };
+		6DD84BF01A2BCBB200D7B5F6 /* GMHUDWindowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHUDWindowViewController.h; sourceTree = "<group>"; };
+		6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMHUDWindowViewController.m; sourceTree = "<group>"; };
+		6DD84BF41A2BCC0600D7B5F6 /* GMHudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHudView.h; sourceTree = "<group>"; };
+		6DD84BF51A2BCC0600D7B5F6 /* GMHudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMHudView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +120,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D5233C01A295695008B4C9B /* Social.framework in Frameworks */,
+				6D6040041A2BD850001F2C35 /* FacebookSDK.framework in Frameworks */,
 				6D5233761A269849008B4C9B /* Accounts.framework in Frameworks */,
 				6D5233741A269829008B4C9B /* Twitter.framework in Frameworks */,
 				6D52335F1A2691D4008B4C9B /* Foundation.framework in Frameworks */,
@@ -213,6 +236,10 @@
 				6D5233531A2684AD008B4C9B /* Y55Preferences.m */,
 				6D5233551A268964008B4C9B /* UIButton+Y55.h */,
 				6D5233561A268964008B4C9B /* UIButton+Y55.m */,
+				6D5233C21A2A99BC008B4C9B /* TwitterProfile.h */,
+				6D5233C31A2A99BC008B4C9B /* TwitterProfile.m */,
+				6D5233C51A2AA060008B4C9B /* TwitterAdapter.h */,
+				6D5233C61A2AA060008B4C9B /* TwitterAdapter.m */,
 			);
 			name = Y55Kit;
 			sourceTree = "<group>";
@@ -220,6 +247,9 @@
 		6D5233631A2694DD008B4C9B /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				6D6040031A2BD850001F2C35 /* FacebookSDK.framework */,
+				6DD84BED1A2BCBA100D7B5F6 /* GMHud */,
+				6D5233C81A2AB25A008B4C9B /* ProgressHUD */,
 				6D52336C1A2695E2008B4C9B /* TwitterKit.framework */,
 				6D52336D1A2695E2008B4C9B /* TwitterKitResources.bundle */,
 				6D5233681A269587008B4C9B /* Crashlytics.framework */,
@@ -247,6 +277,29 @@
 			children = (
 			);
 			name = Localytics;
+			sourceTree = "<group>";
+		};
+		6D5233C81A2AB25A008B4C9B /* ProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				6D5233C91A2AB270008B4C9B /* ProgressHUD.bundle */,
+				6D5233CA1A2AB270008B4C9B /* ProgressHUD.h */,
+				6D5233CB1A2AB270008B4C9B /* ProgressHUD.m */,
+			);
+			name = ProgressHUD;
+			sourceTree = "<group>";
+		};
+		6DD84BED1A2BCBA100D7B5F6 /* GMHud */ = {
+			isa = PBXGroup;
+			children = (
+				6DD84BF41A2BCC0600D7B5F6 /* GMHudView.h */,
+				6DD84BF51A2BCC0600D7B5F6 /* GMHudView.m */,
+				6DD84BEE1A2BCBB200D7B5F6 /* GMHUDWindow.h */,
+				6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */,
+				6DD84BF01A2BCBB200D7B5F6 /* GMHUDWindowViewController.h */,
+				6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */,
+			);
+			name = GMHud;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -345,6 +398,7 @@
 				6D52336F1A2695E2008B4C9B /* TwitterKitResources.bundle in Resources */,
 				6D5233281A267A4D008B4C9B /* LaunchScreen.xib in Resources */,
 				6D5233621A269250008B4C9B /* Settings.bundle in Resources */,
+				6D5233CC1A2AB270008B4C9B /* ProgressHUD.bundle in Resources */,
 				6D5233251A267A4D008B4C9B /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,9 +434,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D5233BB1A26DB90008B4C9B /* AdvicesViewController.m in Sources */,
+				6D5233C71A2AA060008B4C9B /* TwitterAdapter.m in Sources */,
 				6D5233541A2684AD008B4C9B /* Y55Preferences.m in Sources */,
 				6D5233B21A26DB59008B4C9B /* TasksViewController.m in Sources */,
 				6D52334E1A2681E3008B4C9B /* UIColor+Y55.m in Sources */,
+				6DD84BF21A2BCBB200D7B5F6 /* GMHUDWindow.m in Sources */,
 				6D5233481A268061008B4C9B /* Y55Defines.m in Sources */,
 				6D52331D1A267A4D008B4C9B /* AppDelegate.m in Sources */,
 				6D5233431A267F75008B4C9B /* TipsViewController.m in Sources */,
@@ -390,7 +446,11 @@
 				6D52331A1A267A4D008B4C9B /* main.m in Sources */,
 				6D5233B81A26DB7B008B4C9B /* ProfileViewController.m in Sources */,
 				6D5233571A268964008B4C9B /* UIButton+Y55.m in Sources */,
+				6D5233CD1A2AB270008B4C9B /* ProgressHUD.m in Sources */,
+				6DD84BF61A2BCC0600D7B5F6 /* GMHudView.m in Sources */,
 				6D5233511A268425008B4C9B /* NSUserDefaults+Y55.m in Sources */,
+				6D5233C41A2A99BC008B4C9B /* TwitterProfile.m in Sources */,
+				6DD84BF31A2BCBB200D7B5F6 /* GMHUDWindowViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

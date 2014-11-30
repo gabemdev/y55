@@ -10,8 +10,8 @@
 
 @interface ProfileViewController : UIViewController<UIScrollViewDelegate, UINavigationControllerDelegate>
 
-@property (nonatomic) UIImageView *profileImage;
-@property (nonatomic) UILabel *nameLabel;
+@property (nonatomic, copy) UIImageView *profileImage;
+@property (nonatomic, copy) UILabel *nameLabel;
 @property (nonatomic) UITextView *aboutLabel;
 @property (nonatomic) UIButton *urlButton;
 @property (nonatomic) UIButton *logoutButton;

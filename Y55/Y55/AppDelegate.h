@@ -15,7 +15,10 @@
 
 + (AppDelegate *)sharedAppDelegate;
 
-@property (strong, nonatomic) ACAccountStore *accountStore;
+@property (nonatomic) TWTRSession *mainSession;
+@property (nonatomic) TWTRUser *mainUser;
+
+- (void)accessTwitterAccount;
 
 
 @end

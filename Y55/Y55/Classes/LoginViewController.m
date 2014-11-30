@@ -16,16 +16,20 @@
 
 @interface LoginViewController ()
 @property (nonatomic, readonly) UIButton *twitterButton;
+@property (nonatomic, readonly) UIButton *facebookButton;
+
 
 @end
 
 @implementation LoginViewController
 @synthesize twitterButton = _twitterButton;
+@synthesize facebookButton = _facebookButton;
 
 - (UIButton *)twitterButton {
     if (!_twitterButton) {
         _twitterButton = [[UIButton alloc] init];
         _twitterButton.translatesAutoresizingMaskIntoConstraints = NO;
+        _twitterButton.backgroundColor = [UIColor whiteColor];
         _twitterButton.frame = CGRectMake(0.0f, 0.0f, 300.0f, 48.0);
         _twitterButton.layer.cornerRadius = 6;
         _twitterButton.layer.borderWidth = 2.0;
@@ -41,6 +45,12 @@
     return _twitterButton;
 }
 
+- (void)facebookLogin {
+    FBLoginView *loginView = [[FBLoginView alloc] init];
+    loginView.frame = CGRectMake(10.0, 400.0, 300, 48);
+    [self.view addSubview:loginView];
+}
+
 #pragma mark - UIViewController
 - (instancetype)init {
     if ((self = [super init])) {
@@ -52,10 +62,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor y55_redColor]];
     [self.view addSubview:self.twitterButton];
     [self setupViewConstraints];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self _checkUser];
+}
 
 #pragma mark - Twitter SDK
 //- (void)getTwitterAccountOnCompletion:(void(^)(ACAccount *))completionHandler {
@@ -142,13 +157,60 @@
 
 #pragma mark - Actions
 - (void)loginTwitter:(id)sender {
-    
+    GMHudView *hud = [[GMHudView alloc] initWithTitle:@"Signing in..." loading:YES];
+    [hud show];
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
-        if (session != nil) {
-            AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
-            appDelegate.window.rootViewController = appDelegate.tabBarController;
-        }
-    }];
+        if (session) {
+            [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
+                if (user) {
+                    [hud completeAndDismissWithTitle:[NSString stringWithFormat:@"Welcome %@!", [user name]]];
+                    ProfileViewController *viewController = [[ProfileViewController alloc] init];
+                    NSString *imageString = [user profileImageLargeURL];
+                    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
+                    UIImage *image = [UIImage imageWithData:imageData];
+                    [viewController.profileImage setImage:image];
+                    [viewController.nameLabel setText:[user name]];
+                    [viewController.navigationItem setTitle:[user name]];
+                    
+                    NSLog(@"New Session: %@", session);
+                    AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
+                    appDelegate.window.rootViewController = appDelegate.tabBarController;
+                    [appDelegate.tabBarController setSelectedIndex:0];
+                    [ProgressHUD dismiss];
+                    
+                } else {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
+                }
+            }];
+            
+        } else
+            {
+                [hud failAndDismissWithTitle:[NSString stringWithFormat:@"%@",error.localizedDescription]];
+            }
+        }];
 }
+
+- (void)_checkUser {
+    TWTRSession *session = [[Twitter sharedInstance] session];
+    if (session) {
+        [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
+            if (user) {
+                AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
+                appDelegate.window.rootViewController = appDelegate.tabBarController;
+                [appDelegate.tabBarController setSelectedIndex:0];
+            } else {
+                ProfileViewController *viewController = [[ProfileViewController alloc] init];
+                [viewController.profileImage setImage:[UIImage new]];
+                [viewController.nameLabel setText:@"Name"];
+                [viewController.navigationItem setTitle:@" "];
+            }
+        }];
+    } else {
+        NSLog(@"No Session, please sign up");
+    }
+    return;
+}
+
 
 @end

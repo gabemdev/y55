@@ -11,3 +11,5 @@
 #import "NSUserDefaults+Y55.h"
 #import "Y55Preferences.h"
 #import "UIButton+Y55.h"
+#import "TwitterProfile.h"
+#import "ProgressHUD.h"
