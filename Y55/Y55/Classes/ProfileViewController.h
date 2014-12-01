@@ -11,9 +11,13 @@
 @interface ProfileViewController : UIViewController<UIScrollViewDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, copy) UIImageView *profileImage;
-@property (nonatomic, copy) UILabel *nameLabel;
+@property (nonatomic, copy) UILabel *followers;
+@property (nonatomic, copy) UILabel *followersCount;
+@property (nonatomic, copy) UILabel *following;
+@property (nonatomic, copy) UILabel *followingCount;
+@property (nonatomic, copy) UILabel *userNameLabel;
 @property (nonatomic) UITextView *aboutLabel;
-@property (nonatomic) UIButton *urlButton;
 @property (nonatomic) UIButton *logoutButton;
+@property (nonatomic, copy) UILabel *nameLabel;
 
 @end

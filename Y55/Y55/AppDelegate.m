@@ -199,7 +199,11 @@
 - (void)_checkUser {
     TWTRSession *session = [[Twitter sharedInstance] session];
     if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded || session) {
-        NSLog(@"Session Active");
+        if (session) {
+            [self accessTwitterAccount];
+        } else {
+            //Facebook stuff
+        }
     } else {
         AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];

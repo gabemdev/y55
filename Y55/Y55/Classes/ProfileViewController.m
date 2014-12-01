@@ -8,6 +8,7 @@
 
 #import "ProfileViewController.h"
 #import "TwitterProfile.h"
+#import "ProfileView.h"
 
 @interface ProfileViewController ()
 
@@ -19,10 +20,14 @@
 @implementation ProfileViewController
 @synthesize scrollView = _scrollView;
 @synthesize profileImage = _profileImage;
-@synthesize nameLabel = _nameLabel;
+@synthesize followers = _followers;
+@synthesize following = _following;
+@synthesize followersCount = _followersCount;
+@synthesize followingCount = _followingCount;
+@synthesize userNameLabel = _userNameLabel;
 @synthesize aboutLabel = _aboutLabel;
-@synthesize urlButton = _urlButton;
 @synthesize logoutButton = _logoutButton;
+@synthesize nameLabel = _nameLabel;
 
 #pragma mark - UIControls
 
@@ -30,7 +35,7 @@
     if (!_profileImage) {
         _profileImage = [[UIImageView alloc] initWithImage:[UIImage new]];
         _profileImage.backgroundColor = [UIColor y55_blueColor];
-        [_profileImage setFrame:CGRectMake(0.0f, 0.0f, 100.0f, 100.0f)];
+        [_profileImage setFrame:CGRectMake(0.0f, 0.0f, 60.0f, 60.0f)];
         _profileImage.layer.cornerRadius = _profileImage.frame.size.width/2;
         [_profileImage.layer setBorderColor:[UIColor y55_lightTextColor].CGColor];
         [_profileImage.layer setBorderWidth:2.0f];
@@ -40,6 +45,62 @@
     return _profileImage;
 }
 
+- (UILabel *)followers {
+    if (!_followers) {
+        _followers = [[UILabel alloc] init];
+        _followers.translatesAutoresizingMaskIntoConstraints = NO;
+        [_followers setFrame:CGRectMake(0.0f, 0.0f, 100.0f, 22.0f)];
+        _followers.font = [UIFont fontWithName:@"Avenir-Light" size:12.0f];
+        [_followers setTextColor:[UIColor y55_textColor]];
+        [_followers setTextAlignment:NSTextAlignmentLeft];
+        [_followers setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
+        [_followers setText:@"Followers"];
+    }
+    return _followers;
+}
+
+- (UILabel *)following {
+    if (!_following) {
+        _following = [[UILabel alloc] init];
+        _following.translatesAutoresizingMaskIntoConstraints = NO;
+        [_following setFrame:CGRectMake(0.0f, 0.0f, 100.0f, 22.0f)];
+        _following.font = [UIFont fontWithName:@"Avenir-Light" size:12.0f];
+        [_following setTextColor:[UIColor y55_textColor]];
+        [_following setTextAlignment:NSTextAlignmentLeft];
+        [_following setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
+        [_following setText:@"Following"];
+    }
+    return _following;
+}
+
+- (UILabel *)followersCount {
+    if (!_followersCount) {
+        _followersCount = [[UILabel alloc] init];
+        _followersCount.translatesAutoresizingMaskIntoConstraints = NO;
+        [_followersCount setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 22.0f)];
+        _followersCount.font = [UIFont fontWithName:@"Avenir-Medium" size:16.0f];
+        [_followersCount setTextColor:[UIColor y55_darkTextColor]];
+        [_followersCount setTextAlignment:NSTextAlignmentLeft];
+        [_followersCount setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
+        [_followersCount setText:@"0"];
+    }
+    return _followersCount;
+}
+
+- (UILabel *)followingCount {
+    if (!_followingCount) {
+        _followingCount = [[UILabel alloc] init];
+        _followingCount.translatesAutoresizingMaskIntoConstraints = NO;
+        [_followingCount setFrame:CGRectMake(0.0f, 0.0f, 40.0f, 22.0f)];
+        _followingCount.font = [UIFont fontWithName:@"Avenir-Medium" size:16.0f];
+        [_followingCount setTextColor:[UIColor y55_textColor]];
+        [_followingCount setTextAlignment:NSTextAlignmentLeft];
+        [_followingCount setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
+        [_followingCount setText:@"0"];
+    }
+    return _followingCount;
+}
+
 - (UILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[UILabel alloc] init];
@@ -47,11 +108,25 @@
         [_nameLabel setFrame:CGRectMake(0.0f, 0.0f, 200.0f, 32.0f)];
         _nameLabel.font = [UIFont fontWithName:@"Avenir-Heavy" size:18.0f];
         [_nameLabel setTextColor:[UIColor y55_textColor]];
-        [_nameLabel setTextAlignment:NSTextAlignmentCenter];
+        [_nameLabel setTextAlignment:NSTextAlignmentLeft];
         [_nameLabel setBaselineAdjustment:UIBaselineAdjustmentAlignCenters];
         [_nameLabel setText:@"Name"];
     }
     return _nameLabel;
+}
+
+- (UILabel *)userNameLabel {
+    if (!_userNameLabel) {
+        _userNameLabel = [[UILabel alloc] init];
+        _userNameLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [_userNameLabel setFrame:CGRectMake(0.0f, 0.0f, 100.0f, 32.0f)];
+        _userNameLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:16.0f];
+        [_userNameLabel setTextColor:[UIColor y55_blueColor]];
+        [_userNameLabel setTextAlignment:NSTextAlignmentLeft];
+        [_userNameLabel setBaselineAdjustment:UIBaselineAdjustmentAlignBaselines];
+        [_userNameLabel setText:@"@username"];
+    }
+    return _userNameLabel;
 }
 
 - (UITextView *)aboutLabel {
@@ -59,14 +134,14 @@
         _aboutLabel = [[UITextView alloc] init];
         _aboutLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [_aboutLabel setUserInteractionEnabled:NO];
-        [_aboutLabel setFrame:CGRectMake(0.0f, 0.0f, 200.0f, 100.0f)];
+        [_aboutLabel setFrame:CGRectMake(0.0f, 0.0f, 200.0f, 80.0f)];
         _aboutLabel.font = [UIFont fontWithName:@"Avenir-Light" size:14.0f];
         [_aboutLabel setTextColor:[UIColor y55_darkTextColor]];
-        [_aboutLabel setTextAlignment:NSTextAlignmentCenter];
+        [_aboutLabel setTextAlignment:NSTextAlignmentLeft];
         [_aboutLabel setScrollEnabled:YES];
         [_aboutLabel setScrollsToTop:YES];
         [_aboutLabel setText:@"Description"];
-//        [_aboutLabel setBackgroundColor:[UIColor blueColor]];
+        [_aboutLabel setBackgroundColor:[UIColor clearColor]];
     }
     return _aboutLabel;
 }
@@ -75,13 +150,15 @@
     if (!_logoutButton) {
         _logoutButton = [UIButton y55_redButton];
         _logoutButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [_logoutButton setFrame:CGRectMake(0.0f, self.view.bounds.size.height - 44, 300.0f, 42.0f)];
+//        [_logoutButton setFrame:CGRectMake(0.0f, 0.0f, 300.0f, 42.0f)];
+        [_logoutButton sizeToFit];
         [_logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
         [_logoutButton setTitleShadowColor:[UIColor y55_textColor] forState:UIControlStateNormal];
         [_logoutButton addTarget:self action:@selector(logout:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _logoutButton;
 }
+
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
@@ -111,16 +188,28 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editProfile:)];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 115.0f, self.view.bounds.size.width, 0.5)];
+    lineView.backgroundColor = [UIColor y55_lightTextColor];
+    
+    
     [self.view addSubview:self.scrollView];
     [_scrollView addSubview:self.profileImage];
-    [_scrollView addSubview:self.nameLabel];
+//    [_scrollView addSubview:self.nameLabel];
     [_scrollView addSubview:self.aboutLabel];
     [_scrollView addSubview:self.logoutButton];
+    [_scrollView addSubview:self.userNameLabel];
+    [_scrollView addSubview:self.followers];
+    [_scrollView addSubview:self.followersCount];
+    [_scrollView addSubview:self.following];
+    [_scrollView addSubview:self.followingCount];
+    [_scrollView addSubview:lineView];
+    
+    
     [self setupViewConstraints];
     
 //    [self getTwitterInfo];
-    [self loadSocialInfo];
-    [self getProfileInfo];
+//    [self loadSocialInfo];
+//    [self getProfileInfo];
     
     
 }
@@ -154,7 +243,8 @@
             UIImage *image = [UIImage imageWithData:imageData];
             [_profileImage setImage:image];
             
-            [_nameLabel setText:[user name]];
+            [_userNameLabel setText:[NSString stringWithFormat:@"@%@", [user screenName]]];
+//            [_nameLabel setText:[user name]];
             [self.navigationItem setTitle:[user name]];
             
         }
@@ -183,7 +273,6 @@
                                                                                options:0
                                                                                  error:&jsonError];
                           dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//                              NSLog(@"%@", json);
 //                              NSString *profileImageUrl = [user profileImageLargeURL];
 //                              NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:profileImageUrl]];
 //                              UIImage *image = [UIImage imageWithData:imageData];
@@ -191,7 +280,10 @@
                               dispatch_async(dispatch_get_main_queue(), ^{
 //                              [_profileImage setImage:image];
 //                              [_nameLabel setText:[json objectForKey:@"name"]];
-                              [_aboutLabel setText:[json objectForKey:@"description"]];
+                                  
+                                  [_aboutLabel setText:[json objectForKey:@"description"]];
+                                  [_followingCount setText:[NSString stringWithFormat:@"%@",[json objectForKey:@"friends_count"]]];
+                                  [_followersCount setText:[NSString stringWithFormat:@"%@",[json objectForKey:@"followers_count"]]];
                               });
                           });
                       }
@@ -214,7 +306,7 @@
 
 - (void)twitterProfileReceived:(NSDictionary *)jsonResponse {
     self.profile = [[TwitterProfile alloc] initWithJSON:jsonResponse];
-    [_nameLabel setText:[self.profile name]];
+//    [_nameLabel setText:[self.profile name]];
     [_aboutLabel setText:[self.profile descriptionLabel]];
 }
 
@@ -253,10 +345,17 @@
                             @"profileImage":self.profileImage,
                             @"nameLabel":self.nameLabel,
                             @"aboutLabel":self.aboutLabel,
-                            @"logoutButton":self.logoutButton
+                            @"logoutButton":self.logoutButton,
+                            @"user":self.userNameLabel,
+                            @"followers":self.followers,
+                            @"following":self.following,
+                            @"followerCount":self.followersCount,
+                            @"followingCount":self.followingCount
                             };
     
-    //Scroll View
+    //---------------------------
+    // Scroll View
+    //---------------------------
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[scrollView]|"
                                                                       options:kNilOptions
                                                                       metrics:nil
@@ -266,83 +365,90 @@
                                                                       metrics:nil
                                                                         views:views]];
     
-    //Profile Image
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage(100)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
+    //---------------------------
+    // Profile Image
+    //---------------------------
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[profileImage(60)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[profileImage(60)]" options:kNilOptions metrics:nil views:views]];
+    //    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.profileImage
+    //                                                          attribute:NSLayoutAttributeCenterX
+    //                                                          relatedBy:NSLayoutRelationEqual
+    //                                                             toItem:self.scrollView
+    //                                                          attribute:NSLayoutAttributeCenterX
+    //                                                         multiplier:1.0
+    //                                                           constant:0.0]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.profileImage
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.scrollView
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
-                                                           constant:0.0]];
+//    //---------------------------
+//    // Name Label
+//    //---------------------------
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-13-[nameLabel(200)]"
+//                                                                      options:kNilOptions
+//                                                                      metrics:nil
+//                                                                        views:views]];
+//    
+////    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel
+////                                                          attribute:NSLayoutAttributeCenterX
+////                                                          relatedBy:NSLayoutRelationEqual
+////                                                             toItem:self.scrollView
+////                                                          attribute:NSLayoutAttributeCenterX
+////                                                         multiplier:1.0
+////                                                           constant:0.0]];
+//    
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-12-[nameLabel(32)]"
+//                                                                      options:kNilOptions
+//                                                                      metrics:nil
+//                                                                        views:views]];
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[profileImage(100)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
+    //--------------------------
+    // User Name
+    //--------------------------
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[user(200)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-65-[user(32)]" options:kNilOptions metrics:nil views:views]];
     
-    //Name Label
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[nameLabel(200)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
+    //--------------------------
+    // About Label
+    //--------------------------
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[aboutLabel(300)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImage]-12-[aboutLabel(60)]" options:kNilOptions metrics:nil views:views]];
+    //    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.aboutLabel
+    //                                                          attribute:NSLayoutAttributeCenterX
+    //                                                          relatedBy:NSLayoutRelationEqual
+    //                                                             toItem:self.scrollView
+    //                                                          attribute:NSLayoutAttributeCenterX
+    //                                                         multiplier:1.0
+    //                                                           constant:0.0]];
     
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.nameLabel
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.scrollView
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
-                                                           constant:0.0]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImage]-[nameLabel(32)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
-    
-    //About Label
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[aboutLabel(200)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.aboutLabel
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.scrollView
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
-                                                           constant:0.0]];
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[nameLabel][aboutLabel(100)]"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
-    
-    //Logout Button
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[logoutButton(300)]"
-                                                                      options:NSLayoutFormatAlignAllCenterY
-                                                                      metrics:nil
-                                                                        views:views]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton
-                                                          attribute:NSLayoutAttributeCenterX
-                                                          relatedBy:NSLayoutRelationEqual
-                                                             toItem:self.scrollView
-                                                          attribute:NSLayoutAttributeCenterX
-                                                         multiplier:1.0
-                                                           constant:0.0]];
+    //------------------------
+    // Followers
+    //------------------------
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-40-[followerCount(40)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[followerCount(22)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-120-[followingCount(40)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[followingCount(22)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-40-[followers(100)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-35-[followers(22)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-120-[following(100)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-35-[following(22)]" options:kNilOptions metrics:nil views:views]];
     
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[aboutLabel]-140-[logoutButton]-|"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
+    
+    //------------------------
+    // Logout Button
+    //------------------------
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:self.view.bounds.size.height-120]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[logoutButton]-10-|" options:kNilOptions metrics:nil views:views]];
+     
+    
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[logoutButton]-10-|" options:kNilOptions metrics:nil views:views]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0]];
+//    
+////    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|--[logoutButton(42)]-44-|" options:kNilOptions metrics:nil views:views]];
+    
 }
+
+
 
 #pragma mark - Actions
 - (void)editProfile:(id)sender {
@@ -369,7 +475,7 @@
     }
     [self.navigationItem setTitle:@""];
     _profileImage.image = [UIImage new];
-    _nameLabel.text = @"Name";
+//    _nameLabel.text = @"Name";
     _aboutLabel.text = @"Description";
     
     AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];

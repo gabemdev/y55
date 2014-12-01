@@ -38,6 +38,7 @@
 		6D5233CC1A2AB270008B4C9B /* ProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D5233C91A2AB270008B4C9B /* ProgressHUD.bundle */; };
 		6D5233CD1A2AB270008B4C9B /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233CB1A2AB270008B4C9B /* ProgressHUD.m */; };
 		6D6040041A2BD850001F2C35 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6040031A2BD850001F2C35 /* FacebookSDK.framework */; };
+		6D6040081A2C02EB001F2C35 /* ProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6040071A2C02EB001F2C35 /* ProfileView.m */; };
 		6DD84BF21A2BCBB200D7B5F6 /* GMHUDWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */; };
 		6DD84BF31A2BCBB200D7B5F6 /* GMHUDWindowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */; };
 		6DD84BF61A2BCC0600D7B5F6 /* GMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF51A2BCC0600D7B5F6 /* GMHudView.m */; };
@@ -106,6 +107,8 @@
 		6D5233CA1A2AB270008B4C9B /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
 		6D5233CB1A2AB270008B4C9B /* ProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressHUD.m; sourceTree = "<group>"; };
 		6D6040031A2BD850001F2C35 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		6D6040061A2C02EB001F2C35 /* ProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileView.h; path = Classes/ProfileView.h; sourceTree = "<group>"; };
+		6D6040071A2C02EB001F2C35 /* ProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileView.m; path = Classes/ProfileView.m; sourceTree = "<group>"; };
 		6DD84BEE1A2BCBB200D7B5F6 /* GMHUDWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHUDWindow.h; sourceTree = "<group>"; };
 		6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMHUDWindow.m; sourceTree = "<group>"; };
 		6DD84BF01A2BCBB200D7B5F6 /* GMHUDWindowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHUDWindowViewController.h; sourceTree = "<group>"; };
@@ -196,6 +199,8 @@
 				6D5233B71A26DB7B008B4C9B /* ProfileViewController.m */,
 				6D5233B91A26DB90008B4C9B /* AdvicesViewController.h */,
 				6D5233BA1A26DB90008B4C9B /* AdvicesViewController.m */,
+				6D6040061A2C02EB001F2C35 /* ProfileView.h */,
+				6D6040071A2C02EB001F2C35 /* ProfileView.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -435,6 +440,7 @@
 			files = (
 				6D5233BB1A26DB90008B4C9B /* AdvicesViewController.m in Sources */,
 				6D5233C71A2AA060008B4C9B /* TwitterAdapter.m in Sources */,
+				6D6040081A2C02EB001F2C35 /* ProfileView.m in Sources */,
 				6D5233541A2684AD008B4C9B /* Y55Preferences.m in Sources */,
 				6D5233B21A26DB59008B4C9B /* TasksViewController.m in Sources */,
 				6D52334E1A2681E3008B4C9B /* UIColor+Y55.m in Sources */,
