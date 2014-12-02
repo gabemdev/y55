@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.title = @"Tips";
+    [self.navigationItem setTitle:@"Tips"];
     // Do any additional setup after loading the view.
 }
 

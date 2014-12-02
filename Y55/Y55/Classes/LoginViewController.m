@@ -11,6 +11,7 @@
 #import <Accounts/Accounts.h>
 #import <Twitter/Twitter.h>
 #import "ProfileViewController.h"
+#import "CircleLoading.h"
 
 
 
@@ -157,13 +158,15 @@
 
 #pragma mark - Actions
 - (void)loginTwitter:(id)sender {
-    GMHudView *hud = [[GMHudView alloc] initWithTitle:@"Signing in..." loading:YES];
-    [hud show];
+//    GMHudView *hud = [[GMHudView alloc] initWithTitle:@"Signing in..." loading:YES];
+//    [hud show];
+    [CircleLoading showHUDAddedTo:self.view animated:YES];
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
         if (session) {
             [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
                 if (user) {
-                    [hud completeAndDismissWithTitle:[NSString stringWithFormat:@"Welcome %@!", [user name]]];
+//                    [hud completeAndDismissWithTitle:[NSString stringWithFormat:@"Welcome %@!", [user name]]];
+                    [CircleLoading hideHUDFromView:self.view animated:YES];
                     ProfileViewController *viewController = [[ProfileViewController alloc] init];
                     NSString *imageString = [user profileImageLargeURL];
                     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
@@ -171,12 +174,13 @@
                     [viewController.profileImage setImage:image];
                     [viewController.nameLabel setText:[user name]];
                     [viewController.navigationItem setTitle:[user name]];
+                    [ProgressHUD showSuccess:[NSString stringWithFormat:@"Signed in as %@!", [user name]]];
                     
                     NSLog(@"New Session: %@", session);
                     AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
                     appDelegate.window.rootViewController = appDelegate.tabBarController;
                     [appDelegate.tabBarController setSelectedIndex:0];
-                    [ProgressHUD dismiss];
+                    [self performSelector:@selector(clearHUD) withObject:nil afterDelay:2];
                     
                 } else {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"%@", [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
@@ -186,7 +190,7 @@
             
         } else
             {
-                [hud failAndDismissWithTitle:[NSString stringWithFormat:@"%@",error.localizedDescription]];
+//                [hud failAndDismissWithTitle:[NSString stringWithFormat:@"%@",error.localizedDescription]];
             }
         }];
 }
@@ -210,6 +214,10 @@
         NSLog(@"No Session, please sign up");
     }
     return;
+}
+
+- (void)clearHUD {
+    [ProgressHUD dismiss];
 }
 
 

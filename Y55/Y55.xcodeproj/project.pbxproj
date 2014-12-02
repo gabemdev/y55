@@ -42,6 +42,7 @@
 		6DD84BF21A2BCBB200D7B5F6 /* GMHUDWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */; };
 		6DD84BF31A2BCBB200D7B5F6 /* GMHUDWindowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */; };
 		6DD84BF61A2BCC0600D7B5F6 /* GMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF51A2BCC0600D7B5F6 /* GMHudView.m */; };
+		6DE752281A2D26A2007525F7 /* CircleLoading.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DE752271A2D26A2007525F7 /* CircleLoading.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,8 @@
 		6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMHUDWindowViewController.m; sourceTree = "<group>"; };
 		6DD84BF41A2BCC0600D7B5F6 /* GMHudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHudView.h; sourceTree = "<group>"; };
 		6DD84BF51A2BCC0600D7B5F6 /* GMHudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMHudView.m; sourceTree = "<group>"; };
+		6DE752261A2D26A2007525F7 /* CircleLoading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CircleLoading.h; path = Vendor/CircleLoad/CircleLoading.h; sourceTree = "<group>"; };
+		6DE752271A2D26A2007525F7 /* CircleLoading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CircleLoading.m; path = Vendor/CircleLoad/CircleLoading.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +255,7 @@
 		6D5233631A2694DD008B4C9B /* Vendor */ = {
 			isa = PBXGroup;
 			children = (
+				6DE752251A2D2677007525F7 /* CircleLoad */,
 				6D6040031A2BD850001F2C35 /* FacebookSDK.framework */,
 				6DD84BED1A2BCBA100D7B5F6 /* GMHud */,
 				6D5233C81A2AB25A008B4C9B /* ProgressHUD */,
@@ -305,6 +309,15 @@
 				6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */,
 			);
 			name = GMHud;
+			sourceTree = "<group>";
+		};
+		6DE752251A2D2677007525F7 /* CircleLoad */ = {
+			isa = PBXGroup;
+			children = (
+				6DE752261A2D26A2007525F7 /* CircleLoading.h */,
+				6DE752271A2D26A2007525F7 /* CircleLoading.m */,
+			);
+			name = CircleLoad;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -452,6 +465,7 @@
 				6D52331A1A267A4D008B4C9B /* main.m in Sources */,
 				6D5233B81A26DB7B008B4C9B /* ProfileViewController.m in Sources */,
 				6D5233571A268964008B4C9B /* UIButton+Y55.m in Sources */,
+				6DE752281A2D26A2007525F7 /* CircleLoading.m in Sources */,
 				6D5233CD1A2AB270008B4C9B /* ProgressHUD.m in Sources */,
 				6DD84BF61A2BCC0600D7B5F6 /* GMHudView.m in Sources */,
 				6D5233511A268425008B4C9B /* NSUserDefaults+Y55.m in Sources */,

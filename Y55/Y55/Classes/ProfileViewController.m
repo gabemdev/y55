@@ -164,7 +164,7 @@
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
         _scrollView.frame = self.view.bounds;
-        _scrollView.contentSize = CGSizeMake(self.view.center.x, self.view.bounds.size.height-100);
+        _scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height-100);
         _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = YES;
@@ -188,7 +188,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editProfile:)];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 115.0f, self.view.bounds.size.width, 0.5)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 120.0f, self.view.bounds.size.width, 0.5)];
     lineView.backgroundColor = [UIColor y55_lightTextColor];
     
     
@@ -402,7 +402,7 @@
     //--------------------------
     // User Name
     //--------------------------
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[user(200)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-15-[user(200)]" options:kNilOptions metrics:nil views:views]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-65-[user(32)]" options:kNilOptions metrics:nil views:views]];
     
     //--------------------------
