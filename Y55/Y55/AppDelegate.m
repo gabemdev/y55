@@ -15,6 +15,8 @@
 #import "TasksViewController.h"
 #import "ProfileViewController.h"
 #import "AdvicesViewController.h"
+#import "MoreViewController.h"
+
 #import "UIColor+Y55.h"
 
 
@@ -65,6 +67,7 @@
     //Register for Remote Notifications
     [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
     [[UIApplication sharedApplication] registerForRemoteNotifications];
+    
     
     
     
@@ -126,31 +129,42 @@
     UIViewController *tips = [[TipsViewController alloc] init];
     UINavigationController *tipsNavigationController = [[UINavigationController alloc] initWithRootViewController:tips];
     [tipsNavigationController.navigationBar setTranslucent:NO];
-    tipsNavigationController.navigationBar.barTintColor = [UIColor y55_purpleColor];
-    [tipsNavigationController.tabBarItem setTitle:@"Tips"];
+//    tipsNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
+    [tipsNavigationController.tabBarItem setTitle:@"Feed"];
+    [tipsNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_purpleColor]} forState:UIControlStateSelected];
 //    [tips setTitle:@"Tips"];
     
     UIViewController *tasks = [[TasksViewController alloc] init];
     UINavigationController *taskNavigationController = [[UINavigationController alloc] initWithRootViewController:tasks];
     [taskNavigationController.navigationBar setTranslucent:NO];
-    taskNavigationController.navigationBar.barTintColor = [UIColor y55_orangeColor];
-    [taskNavigationController.tabBarItem setTitle:@"Tasks"];
+//    taskNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
+    [taskNavigationController.tabBarItem setTitle:@"Network"];
     
     UIViewController *profile = [[ProfileViewController alloc] init];
     UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:profile];
     [profileNavigationController.navigationBar setTranslucent:NO];
-    profileNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
+//    profileNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
     [profileNavigationController.tabBarItem setTitle:@"Profile"];
+    [profileNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_blueColor]} forState:UIControlStateSelected];
     
     UIViewController *advice = [[AdvicesViewController alloc] init];
     UINavigationController *adviceNavigationController = [[UINavigationController alloc] initWithRootViewController:advice];
     [adviceNavigationController.navigationBar setTranslucent:NO];
-    adviceNavigationController.navigationBar.barTintColor = [UIColor y55_greenColor];
-    [adviceNavigationController.tabBarItem setTitle:@"Advices"];
+//    adviceNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
+    [adviceNavigationController.tabBarItem setTitle:@"Stats"];
+    [adviceNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_greenColor]} forState:UIControlStateSelected];
+    
+    UIViewController *more = [[MoreViewController alloc] init];
+    UINavigationController *moreNavigationController = [[UINavigationController alloc] initWithRootViewController:more];
+    [moreNavigationController.navigationBar setTranslucent:NO];
+//    moreNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
+    [moreNavigationController.tabBarItem setTitle:@"More"];
+    [more.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_yellowColor]} forState:UIControlStateSelected];
+    
     
     [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:@"Tips" forState:UIControlStateNormal];
     
-    _tabBarController.viewControllers = @[tipsNavigationController, taskNavigationController, profileNavigationController, adviceNavigationController];
+    _tabBarController.viewControllers = @[tipsNavigationController, taskNavigationController, profileNavigationController, adviceNavigationController, moreNavigationController];
 }
 
 #pragma mark - Appearance
@@ -164,6 +178,7 @@
     
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.barStyle = UIBarStyleBlack;
+    navigationBar.barTintColor = [UIColor y55_blueColor];
     navigationBar.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5f];
     navigationBar.titleTextAttributes =@{
                                          NSForegroundColorAttributeName: [UIColor whiteColor],
@@ -171,14 +186,16 @@
                                          };
     
     UITabBar *tabBar = [UITabBar appearance];
+    [tabBar setBarStyle:UIBarStyleDefault];
+    [tabBar setTranslucent:NO];
     [tabBar setTintColor:[UIColor y55_blueColor]];
-    [tabBar setBarTintColor:[UIColor whiteColor]];
+    [tabBar setBackgroundImage:[UIImage new]];
     
     UITabBarItem *tabBarItem = [UITabBarItem appearance];
     [tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_darkTextColor],
-                                         NSFontAttributeName: [UIFont fontWithName:@"Avenir-Light" size:15.0f]} forState:UIControlStateNormal];
+                                         NSFontAttributeName: [UIFont fontWithName:@"Avenir-Light" size:14.0f]} forState:UIControlStateNormal];
     [tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_orangeColor]} forState:UIControlStateSelected];
-    [tabBarItem setTitlePositionAdjustment:UIOffsetMake(0.0, -10.0)];
+    [tabBarItem setTitlePositionAdjustment:UIOffsetMake(0.0, -13.0)];
 }
 
 #pragma mark - Settings
@@ -203,6 +220,7 @@
             [self accessTwitterAccount];
         } else {
             //Facebook stuff
+            
         }
     } else {
         AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
@@ -230,7 +248,7 @@
         [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
             if (user) {
                 [ProgressHUD showSuccess:[NSString stringWithFormat:@"Welcome back %@!", [user name]]];
-                [_tabBarController setSelectedIndex:0];
+//                [_tabBarController setSelectedIndex:0];
                 ProfileViewController *viewController = [[ProfileViewController alloc] init];
                 NSString *imageString = [user profileImageLargeURL];
                 NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
@@ -250,4 +268,5 @@
     return;
     
 }
+
 @end

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6D52331A1A267A4D008B4C9B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233191A267A4D008B4C9B /* main.m */; };
 		6D52331D1A267A4D008B4C9B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D52331C1A267A4D008B4C9B /* AppDelegate.m */; };
-		6D5233251A267A4D008B4C9B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D5233241A267A4D008B4C9B /* Images.xcassets */; };
 		6D5233281A267A4D008B4C9B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6D5233261A267A4D008B4C9B /* LaunchScreen.xib */; };
 		6D5233341A267A4D008B4C9B /* Y55Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233331A267A4D008B4C9B /* Y55Tests.m */; };
 		6D5233431A267F75008B4C9B /* TipsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233421A267F75008B4C9B /* TipsViewController.m */; };
@@ -37,8 +36,10 @@
 		6D5233C71A2AA060008B4C9B /* TwitterAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233C61A2AA060008B4C9B /* TwitterAdapter.m */; };
 		6D5233CC1A2AB270008B4C9B /* ProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 6D5233C91A2AB270008B4C9B /* ProgressHUD.bundle */; };
 		6D5233CD1A2AB270008B4C9B /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D5233CB1A2AB270008B4C9B /* ProgressHUD.m */; };
+		6D52E5181A2EB9C700808C0F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D52E5171A2EB9C700808C0F /* Images.xcassets */; };
 		6D6040041A2BD850001F2C35 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6040031A2BD850001F2C35 /* FacebookSDK.framework */; };
 		6D6040081A2C02EB001F2C35 /* ProfileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6040071A2C02EB001F2C35 /* ProfileView.m */; };
+		6DA042161A2E1B1800AC80D4 /* MoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA042151A2E1B1800AC80D4 /* MoreViewController.m */; };
 		6DD84BF21A2BCBB200D7B5F6 /* GMHUDWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */; };
 		6DD84BF31A2BCBB200D7B5F6 /* GMHUDWindowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF11A2BCBB200D7B5F6 /* GMHUDWindowViewController.m */; };
 		6DD84BF61A2BCC0600D7B5F6 /* GMHudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD84BF51A2BCC0600D7B5F6 /* GMHudView.m */; };
@@ -61,7 +62,6 @@
 		6D5233191A267A4D008B4C9B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6D52331B1A267A4D008B4C9B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6D52331C1A267A4D008B4C9B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6D5233241A267A4D008B4C9B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6D5233271A267A4D008B4C9B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		6D52332D1A267A4D008B4C9B /* Y55Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Y55Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D5233321A267A4D008B4C9B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Y55Tests/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -107,9 +107,12 @@
 		6D5233C91A2AB270008B4C9B /* ProgressHUD.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ProgressHUD.bundle; sourceTree = "<group>"; };
 		6D5233CA1A2AB270008B4C9B /* ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
 		6D5233CB1A2AB270008B4C9B /* ProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressHUD.m; sourceTree = "<group>"; };
+		6D52E5171A2EB9C700808C0F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6D6040031A2BD850001F2C35 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		6D6040061A2C02EB001F2C35 /* ProfileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProfileView.h; path = Classes/ProfileView.h; sourceTree = "<group>"; };
 		6D6040071A2C02EB001F2C35 /* ProfileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProfileView.m; path = Classes/ProfileView.m; sourceTree = "<group>"; };
+		6DA042141A2E1B1800AC80D4 /* MoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoreViewController.h; path = Classes/MoreViewController.h; sourceTree = "<group>"; };
+		6DA042151A2E1B1800AC80D4 /* MoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoreViewController.m; path = Classes/MoreViewController.m; sourceTree = "<group>"; };
 		6DD84BEE1A2BCBB200D7B5F6 /* GMHUDWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHUDWindow.h; sourceTree = "<group>"; };
 		6DD84BEF1A2BCBB200D7B5F6 /* GMHUDWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMHUDWindow.m; sourceTree = "<group>"; };
 		6DD84BF01A2BCBB200D7B5F6 /* GMHUDWindowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMHUDWindowViewController.h; sourceTree = "<group>"; };
@@ -204,6 +207,8 @@
 				6D5233BA1A26DB90008B4C9B /* AdvicesViewController.m */,
 				6D6040061A2C02EB001F2C35 /* ProfileView.h */,
 				6D6040071A2C02EB001F2C35 /* ProfileView.m */,
+				6DA042141A2E1B1800AC80D4 /* MoreViewController.h */,
+				6DA042151A2E1B1800AC80D4 /* MoreViewController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -211,6 +216,7 @@
 		6D52333F1A267EAE008B4C9B /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				6D52E5171A2EB9C700808C0F /* Images.xcassets */,
 				6D5233601A2691E2008B4C9B /* Y55.entitlements */,
 				6D5233191A267A4D008B4C9B /* main.m */,
 				6D5233591A26906E008B4C9B /* Y55-Prefix.pch */,
@@ -224,7 +230,6 @@
 				6D5233261A267A4D008B4C9B /* LaunchScreen.xib */,
 				6D5233181A267A4D008B4C9B /* Info.plist */,
 				6D5233321A267A4D008B4C9B /* Info.plist */,
-				6D5233241A267A4D008B4C9B /* Images.xcassets */,
 				6D5233611A269250008B4C9B /* Settings.bundle */,
 			);
 			name = Resources;
@@ -414,10 +419,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D52336F1A2695E2008B4C9B /* TwitterKitResources.bundle in Resources */,
+				6D52E5181A2EB9C700808C0F /* Images.xcassets in Resources */,
 				6D5233281A267A4D008B4C9B /* LaunchScreen.xib in Resources */,
 				6D5233621A269250008B4C9B /* Settings.bundle in Resources */,
 				6D5233CC1A2AB270008B4C9B /* ProgressHUD.bundle in Resources */,
-				6D5233251A267A4D008B4C9B /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +475,7 @@
 				6DD84BF61A2BCC0600D7B5F6 /* GMHudView.m in Sources */,
 				6D5233511A268425008B4C9B /* NSUserDefaults+Y55.m in Sources */,
 				6D5233C41A2A99BC008B4C9B /* TwitterProfile.m in Sources */,
+				6DA042161A2E1B1800AC80D4 /* MoreViewController.m in Sources */,
 				6DD84BF31A2BCBB200D7B5F6 /* GMHUDWindowViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

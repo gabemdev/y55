@@ -1,6 +1,6 @@
 # Y55 Happy iOS App
-### Dec 1 Update
-![LoginView](https://cldup.com/xiCVTLHAYH.png)
+### Dec 2 Update
+![LoginView](https://cldup.com/Q5vtaSakAI.png)
 ![TipsView](https://cldup.com/vJYaCiANJM.png)
 ![TasksView](https://cldup.com/70rnWR_LwS.png)
 ![ProfileView](https://cldup.com/Ps2FlBE3xZ.png)

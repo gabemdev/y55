@@ -20,6 +20,7 @@
 @implementation ProfileViewController
 @synthesize scrollView = _scrollView;
 @synthesize profileImage = _profileImage;
+@synthesize bannerImage = _bannerImage;
 @synthesize followers = _followers;
 @synthesize following = _following;
 @synthesize followersCount = _followersCount;
@@ -31,11 +32,22 @@
 
 #pragma mark - UIControls
 
+- (UIImageView *)bannerImage {
+    if (!_bannerImage) {
+        _bannerImage = [[UIImageView alloc] initWithImage:[UIImage new]];
+        _bannerImage.backgroundColor = [UIColor y55_blueColor];
+        [_bannerImage setFrame:CGRectMake(0.0f, 0.0f, 300.0f, 160.0f)];
+        _bannerImage.clipsToBounds = YES;
+        _bannerImage.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _bannerImage;
+}
+
 - (UIImageView *)profileImage {
     if (!_profileImage) {
         _profileImage = [[UIImageView alloc] initWithImage:[UIImage new]];
         _profileImage.backgroundColor = [UIColor y55_blueColor];
-        [_profileImage setFrame:CGRectMake(0.0f, 0.0f, 60.0f, 60.0f)];
+        [_profileImage setFrame:CGRectMake(0.0f, 0.0f, 80.0f, 80.0f)];
         _profileImage.layer.cornerRadius = _profileImage.frame.size.width/2;
         [_profileImage.layer setBorderColor:[UIColor y55_lightTextColor].CGColor];
         [_profileImage.layer setBorderWidth:2.0f];
@@ -150,7 +162,7 @@
     if (!_logoutButton) {
         _logoutButton = [UIButton y55_redButton];
         _logoutButton.translatesAutoresizingMaskIntoConstraints = NO;
-//        [_logoutButton setFrame:CGRectMake(0.0f, 0.0f, 300.0f, 42.0f)];
+        [_logoutButton setFrame:CGRectMake(0.0f, 0.0f, 300.0f, 42.0f)];
         [_logoutButton sizeToFit];
         [_logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
         [_logoutButton setTitleShadowColor:[UIColor y55_textColor] forState:UIControlStateNormal];
@@ -188,12 +200,13 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editProfile:)];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 120.0f, self.view.bounds.size.width, 0.5)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 180.0f, self.view.bounds.size.width, 0.5)];
     lineView.backgroundColor = [UIColor y55_lightTextColor];
     
     
     [self.view addSubview:self.scrollView];
     [_scrollView addSubview:self.profileImage];
+    [_scrollView addSubview:self.bannerImage];
 //    [_scrollView addSubview:self.nameLabel];
     [_scrollView addSubview:self.aboutLabel];
     [_scrollView addSubview:self.logoutButton];
@@ -203,21 +216,20 @@
     [_scrollView addSubview:self.following];
     [_scrollView addSubview:self.followingCount];
     [_scrollView addSubview:lineView];
+    [_scrollView sendSubviewToBack:self.bannerImage];
     
     
     [self setupViewConstraints];
     
-//    [self getTwitterInfo];
-//    [self loadSocialInfo];
-//    [self getProfileInfo];
+    [self loadSocialInfo];
+    [self getProfileInfo];
     
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self loadSocialInfo];
-    [self getProfileInfo];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -239,6 +251,7 @@
     [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
         if (user) {
             NSString *imageString = [user profileImageLargeURL];
+            NSLog(@"%@", imageString);
             NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
             UIImage *image = [UIImage imageWithData:imageData];
             [_profileImage setImage:image];
@@ -272,14 +285,16 @@
                           NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
                                                                                options:0
                                                                                  error:&jsonError];
-                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//                              NSString *profileImageUrl = [user profileImageLargeURL];
-//                              NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:profileImageUrl]];
-//                              UIImage *image = [UIImage imageWithData:imageData];
+                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                              NSString *bannerURLStrong = [NSString stringWithFormat:@"%@/mobile_retina",[json objectForKey:@"profile_banner_url"]];
+                              
+//                              NSString *profileImageURLString = [NSString stringWithFormat:@"%@",[json objectForKey:@"profile_image_url"]];
+//                              profileImageURLString = [profileImageURLString stringByReplacingOccurrencesOfString:@"_normal" withString:@"_reasonably_small"];
                               
                               dispatch_async(dispatch_get_main_queue(), ^{
-//                              [_profileImage setImage:image];
-//                              [_nameLabel setText:[json objectForKey:@"name"]];
+                                  NSURL *url = [NSURL URLWithString:bannerURLStrong];
+                                  NSData *data = [NSData dataWithContentsOfURL:url];
+                                  _bannerImage.image = [UIImage imageWithData:data];
                                   
                                   [_aboutLabel setText:[json objectForKey:@"description"]];
                                   [_followingCount setText:[NSString stringWithFormat:@"%@",[json objectForKey:@"friends_count"]]];
@@ -343,6 +358,7 @@
     NSDictionary *views = @{
                             @"scrollView":self.scrollView,
                             @"profileImage":self.profileImage,
+                            @"banner" : self.bannerImage,
                             @"nameLabel":self.nameLabel,
                             @"aboutLabel":self.aboutLabel,
                             @"logoutButton":self.logoutButton,
@@ -368,8 +384,8 @@
     //---------------------------
     // Profile Image
     //---------------------------
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[profileImage(60)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[profileImage(60)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
     //    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.profileImage
     //                                                          attribute:NSLayoutAttributeCenterX
     //                                                          relatedBy:NSLayoutRelationEqual
@@ -377,6 +393,15 @@
     //                                                          attribute:NSLayoutAttributeCenterX
     //                                                         multiplier:1.0
     //                                                           constant:0.0]];
+    
+    
+    //-----------------------------
+    // Banner Image
+    //-----------------------------
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerImage attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[banner(115)]" options:kNilOptions metrics:nil views:views]];
+    
+    
     
 //    //---------------------------
 //    // Name Label
@@ -403,13 +428,13 @@
     // User Name
     //--------------------------
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-15-[user(200)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-65-[user(32)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-113-[user(32)]" options:kNilOptions metrics:nil views:views]];
     
     //--------------------------
     // About Label
     //--------------------------
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[aboutLabel(300)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImage]-12-[aboutLabel(60)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImage]-42-[aboutLabel(60)]" options:kNilOptions metrics:nil views:views]];
     //    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.aboutLabel
     //                                                          attribute:NSLayoutAttributeCenterX
     //                                                          relatedBy:NSLayoutRelationEqual
@@ -435,9 +460,10 @@
     //------------------------
     // Logout Button
     //------------------------
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:self.view.bounds.size.height-120]];
+//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-[logoutButton]-|" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0f constant:self.view.bounds.size.height-120]];
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[logoutButton]-10-|" options:kNilOptions metrics:nil views:views]];
+    
      
     
 //    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[logoutButton]-10-|" options:kNilOptions metrics:nil views:views]];
@@ -456,9 +482,13 @@
 }
 
 - (void)logout:(id)sender {
-    [[Twitter sharedInstance] logOut];
-    [TwitterKit logOut];
-     [self signOut:nil];
+    TWTRSession *session = [[Twitter sharedInstance] session];
+    if (session) {
+        [[Twitter sharedInstance] logOut];
+        [TwitterKit logOut];
+        [self signOut:nil];
+    }
+    
     
 }
 
