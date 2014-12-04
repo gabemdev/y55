@@ -58,6 +58,7 @@
 //        [_twitterButton setImage:[UIImage imageNamed:@"facebook"] forState:UIControlStateNormal];
         [_twitterButton setTitle:@"Sign In with Twitter" forState:UIControlStateNormal];
         [_twitterButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_twitterButton setTitleColor:[UIColor y55_textColor] forState:UIControlStateHighlighted];
         _twitterButton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
         [_twitterButton addTarget:self action:@selector(loginTwitter:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -73,8 +74,9 @@
         _facebookButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         [_facebookButton setTitle:@"Sign In with Facebook" forState:UIControlStateNormal];
         [_facebookButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_facebookButton setTitleColor:[UIColor y55_textColor] forState:UIControlStateHighlighted];
         _facebookButton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
-        [_facebookButton addTarget:self action:@selector(loginTwitter:) forControlEvents:UIControlEventTouchUpInside];
+//        [_facebookButton addTarget:self action:@selector(loginTwitter:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _facebookButton;
 }
@@ -88,8 +90,9 @@
         _googleButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         [_googleButton setTitle:@"Sign In with Google+" forState:UIControlStateNormal];
         [_googleButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_googleButton setTitleColor:[UIColor y55_textColor] forState:UIControlStateHighlighted];
         _googleButton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
-        [_googleButton addTarget:self action:@selector(loginTwitter:) forControlEvents:UIControlEventTouchUpInside];
+//        [_googleButton addTarget:self action:@selector(loginTwitter:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _googleButton;
 }
@@ -103,8 +106,9 @@
         _linkedInButton.titleLabel.textAlignment = NSTextAlignmentCenter;
         [_linkedInButton setTitle:@"Sign In with LinkedIn" forState:UIControlStateNormal];
         [_linkedInButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_linkedInButton setTitleColor:[UIColor y55_textColor] forState:UIControlStateHighlighted];
         _linkedInButton.contentEdgeInsets = UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0);
-        [_linkedInButton addTarget:self action:@selector(loginTwitter:) forControlEvents:UIControlEventTouchUpInside];
+//        [_linkedInButton addTarget:self action:@selector(loginTwitter:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _linkedInButton;
 }
@@ -126,7 +130,7 @@
     [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
 //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-//    [self.navigationController.navigationBar setBarTintColor:[UIColor y55_blueColor]];
+    [self.navigationController.navigationBar setBarTintColor:[UIColor clearColor]];
     [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     [self.navigationController.navigationBar setTranslucent:YES];
@@ -173,7 +177,7 @@
     //    GMHudView *hud = [[GMHudView alloc] initWithTitle:@"Signing in..." loading:YES];
     //    [hud show];
     [self hideButtons];
-    [CircleLoading showHUDAddedTo:self.view animated:YES];
+    [CircleLoading showHUDAddedTo:self.view withTitle:@"Loading..." animated:YES];
     [[Twitter sharedInstance] logInWithCompletion:^(TWTRSession *session, NSError *error) {
         if (session) {
             [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {

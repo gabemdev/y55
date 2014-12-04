@@ -35,7 +35,7 @@
 
 - (void)stopSpinProgressBackgroundLayer;
 
-+ (CircleLoading *)showHUDAddedTo:(UIView *)view animated:(BOOL)animated;
++ (CircleLoading *)showHUDAddedTo:(UIView *)view withTitle:(NSString *)title animated:(BOOL)animated;
 
 + (BOOL)hideHUDFromView:(UIView *)view animated:(BOOL)animated;
 

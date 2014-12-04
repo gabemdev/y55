@@ -1,5 +1,7 @@
 # Y55 Happy iOS App
+
 ### Dec 2 Update
+
 ## Contributing to this project
 If you have feature requests or bug reports, feel free to help out by sending pull requests or by [creating new issues](https://github.com/gabemdev/GMDCircleLoader/issues/new). 
 

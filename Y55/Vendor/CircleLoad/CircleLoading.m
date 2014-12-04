@@ -21,7 +21,7 @@
 //-----------------------------------
 // Add the loader to view
 //-----------------------------------
-+ (CircleLoading *)showHUDAddedTo:(UIView *)view animated:(BOOL)animated {
++ (CircleLoading *)showHUDAddedTo:(UIView *)view withTitle:(NSString *)title animated:(BOOL)animated {
     CircleLoading *hud = [[CircleLoading alloc] initWithFrame:GMD_SPINNER_FRAME];
     
     //You can add an image to the center of the spinner view
@@ -29,6 +29,13 @@
 //    img.image = GMD_IMAGE;
 //    hud.center = img.center;
 //    [hud addSubview:img];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(-65.0f, 50.0f, 200.0f, 42.0f)];
+    label.font = [UIFont fontWithName:@"Avenir-medium" size:16.0f];
+    label.textColor = GMD_SPINNER_COLOR;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = title;
+    [hud addSubview:label];
     
     [hud startSpinProgressBackgroundLayer];
     [view addSubview:hud];

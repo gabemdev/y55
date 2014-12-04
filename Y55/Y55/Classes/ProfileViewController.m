@@ -251,7 +251,6 @@
     [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
         if (user) {
             NSString *imageString = [user profileImageLargeURL];
-            NSLog(@"%@", imageString);
             NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
             UIImage *image = [UIImage imageWithData:imageData];
             [_profileImage setImage:image];
@@ -493,7 +492,7 @@
 }
 
 - (void)signOut:(id)sender {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign Out" message:@"Are you sure you want to sign out of Hipster" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Sign Out", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign Out" message:@"Are you sure you want to sign out of Y55?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Sign Out", nil];
     [alert show];
     
     
