@@ -8,12 +8,16 @@
 
 #import "ProfileViewController.h"
 #import "TwitterProfile.h"
-#import "ProfileView.h"
+#import "TwitterAdapter.h"
+#import "LoginViewController.h"
 
 @interface ProfileViewController ()
 
 @property (nonatomic, readonly) UIScrollView *scrollView;
-@property (atomic, strong) TwitterProfile *profile;
+@property (nonatomic) LoginViewController *loginViewController;
+@property (nonatomic) BOOL autoRefreshing;
+@property (nonatomic) NSTimer *autoRefreshTimer;
+@property (nonatomic) BOOL loading;
 
 @end
 
@@ -29,6 +33,10 @@
 @synthesize aboutLabel = _aboutLabel;
 @synthesize logoutButton = _logoutButton;
 @synthesize nameLabel = _nameLabel;
+@synthesize lineView = _lineView;
+@synthesize autoRefreshing = _autoRefreshing;
+@synthesize autoRefreshTimer = _autoRefreshTimer;
+@synthesize loading = _loading;
 
 #pragma mark - UIControls
 
@@ -39,6 +47,7 @@
         [_bannerImage setFrame:CGRectMake(0.0f, 0.0f, 300.0f, 160.0f)];
         _bannerImage.clipsToBounds = YES;
         _bannerImage.translatesAutoresizingMaskIntoConstraints = NO;
+        _bannerImage.image = [UIImage imageNamed:@"profile-bg"];
     }
     return _bannerImage;
 }
@@ -146,7 +155,7 @@
         _aboutLabel = [[UITextView alloc] init];
         _aboutLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [_aboutLabel setUserInteractionEnabled:NO];
-        [_aboutLabel setFrame:CGRectMake(0.0f, 0.0f, 200.0f, 80.0f)];
+        [_aboutLabel setFrame:CGRectMake(0.0f, 0.0f, 200.0f, 60.0f)];
         _aboutLabel.font = [UIFont fontWithName:@"Avenir-Light" size:14.0f];
         [_aboutLabel setTextColor:[UIColor y55_darkTextColor]];
         [_aboutLabel setTextAlignment:NSTextAlignmentLeft];
@@ -175,8 +184,8 @@
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
-        _scrollView.frame = self.view.bounds;
-        _scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height-100);
+//        _scrollView.frame = self.view.bounds;
+//        _scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height-100);
         _scrollView.backgroundColor = [UIColor clearColor];
         _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.showsVerticalScrollIndicator = YES;
@@ -184,6 +193,45 @@
         _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _scrollView;
+}
+
+//- (UIView *)lineView {
+//    if (!_lineView) {
+//        _lineView = [[UIView alloc] init];
+//        _lineView.translatesAutoresizingMaskIntoConstraints = NO;
+//        _lineView.frame = CGRectMake(0.0f, 0.0f ,300, 30);
+//        _lineView.backgroundColor = [UIColor y55_lightTextColor];
+//    }
+//    return _lineView;
+//}
+
+- (void)setAutoRefreshing:(BOOL)autoRefreshing {
+    if (_autoRefreshing == autoRefreshing) {
+        return;
+    }
+    
+    _autoRefreshing = autoRefreshing;
+    
+    if (_autoRefreshing) {
+        self.autoRefreshTimer = [NSTimer timerWithTimeInterval:60.0 target:self selector:@selector(refresh:) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:self.autoRefreshTimer forMode:NSRunLoopCommonModes];
+    } else {
+        [self.autoRefreshTimer invalidate];
+    }
+}
+
+- (void)refresh:(id)sender {
+    if (self.loading) {
+        return;
+    }
+    self.loading = YES;
+    [self getTwitterProfile];
+}
+
+#pragma mark - NSObject
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UIViewController
@@ -197,44 +245,54 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Edit" style:UIBarButtonItemStylePlain target:self action:@selector(editProfile:)];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sign Out" style:UIBarButtonItemStylePlain target:self action:@selector(logout:)];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 180.0f, self.view.bounds.size.width, 0.5)];
-    lineView.backgroundColor = [UIColor y55_lightTextColor];
-    
     
     [self.view addSubview:self.scrollView];
     [_scrollView addSubview:self.profileImage];
     [_scrollView addSubview:self.bannerImage];
-//    [_scrollView addSubview:self.nameLabel];
     [_scrollView addSubview:self.aboutLabel];
-    [_scrollView addSubview:self.logoutButton];
+//    [_scrollView addSubview:self.logoutButton];
     [_scrollView addSubview:self.userNameLabel];
     [_scrollView addSubview:self.followers];
     [_scrollView addSubview:self.followersCount];
     [_scrollView addSubview:self.following];
     [_scrollView addSubview:self.followingCount];
-    [_scrollView addSubview:lineView];
     [_scrollView sendSubviewToBack:self.bannerImage];
     
+    [self getTwitterProfile];
+    
+    [self refresh:nil];
+    [self preferencesDidChange];
+    
+    
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(preferencesDidChange) name:NSUserDefaultsDidChangeNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(updateTimerPaused:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(updateTimerPaused:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(refresh:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self setupViewConstraints];
-    
-    [self loadSocialInfo];
-    [self getProfileInfo];
     
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self _checkUser];
+    self.autoRefreshing = [[NSUserDefaults standardUserDefaults] boolForKey:kY55AutomaticallyRefresh];
 
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.autoRefreshing = NO;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -246,111 +304,58 @@
 
 #pragma mark - Social
 
--(void)loadSocialInfo {
-    TWTRSession *session = [[Twitter sharedInstance] session];
-    [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
-        if (user) {
-            NSString *imageString = [user profileImageLargeURL];
-            NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
-            UIImage *image = [UIImage imageWithData:imageData];
-            [_profileImage setImage:image];
-            
-            [_userNameLabel setText:[NSString stringWithFormat:@"@%@", [user screenName]]];
-//            [_nameLabel setText:[user name]];
-            [self.navigationItem setTitle:[user name]];
-            
-        }
-    }];
-}
-
-- (void)getProfileInfo{
-    TWTRSession *session = [[Twitter sharedInstance] session];
-    [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
-        if (user) {
-            NSString *userString = @"https://api.twitter.com/1.1/users/show.json";
-            NSDictionary* params = @{@"screen_name" : [user screenName]};
-            NSError *error;
-            NSURLRequest *request = [[[Twitter sharedInstance] APIClient] URLRequestWithMethod:@"GET"
-                                                                                           URL:userString
-                                                                                    parameters:params
-                                                                                         error:&error];
-            
-            if (request) {
-                [[[Twitter sharedInstance] APIClient] sendTwitterRequest:request
-                                                              completion:^(NSURLResponse *response,
-                                                                           NSData *data, NSError *connectionError) {
-                      if (data) {
-                          NSError *jsonError;
-                          NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
-                                                                               options:0
-                                                                                 error:&jsonError];
-                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                              NSString *bannerURLStrong = [NSString stringWithFormat:@"%@/mobile_retina",[json objectForKey:@"profile_banner_url"]];
-                              
-//                              NSString *profileImageURLString = [NSString stringWithFormat:@"%@",[json objectForKey:@"profile_image_url"]];
-//                              profileImageURLString = [profileImageURLString stringByReplacingOccurrencesOfString:@"_normal" withString:@"_reasonably_small"];
-                              
-                              dispatch_async(dispatch_get_main_queue(), ^{
-                                  NSURL *url = [NSURL URLWithString:bannerURLStrong];
-                                  NSData *data = [NSData dataWithContentsOfURL:url];
-                                  _bannerImage.image = [UIImage imageWithData:data];
-                                  
-                                  [_aboutLabel setText:[json objectForKey:@"description"]];
-                                  [_followingCount setText:[NSString stringWithFormat:@"%@",[json objectForKey:@"friends_count"]]];
-                                  [_followersCount setText:[NSString stringWithFormat:@"%@",[json objectForKey:@"followers_count"]]];
-                              });
-                          });
-                      }
-                      else {
-                          NSLog(@"Error: %@", connectionError);
-                      }
-                  }];
-            }
-            else {
-                NSLog(@"Error: %@", error);
-            }
-        } else {
-            NSLog(@"Error: %@", error);
-        }
-    }];
+- (void)getTwitterProfile {
+    Y55User *user = [Y55User sharedInstance];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSString *banner = user.bannerImageUrl;
+        NSURL *bannerURL = [NSURL URLWithString:banner];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSData *bannerData = [NSData dataWithContentsOfURL:bannerURL];
+            if (bannerData) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.bannerImage.image = [UIImage imageWithData:bannerData];
+                });
+            } 
+        });
+    });
     
     
+   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+       NSString *profile = user.profileImageUrl;
+       NSURL *profileURL = [NSURL URLWithString:profile];
+       
+       dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+           NSData *profileData = [NSData dataWithContentsOfURL:profileURL];
+           if (profileData) {
+               dispatch_async(dispatch_get_main_queue(), ^{
+                   self.profileImage.image = [UIImage imageWithData:profileData];
+               });
+           }
+       });
+   });
+    
+    self.followersCount.text = user.followerCount;
+    self.followingCount.text = user.followingCount;
+    if ([user.followerCount isEqual:@"(null)"] && [user.followingCount isEqual:@"(null)"]) {
+        [self.followingCount setHidden:YES];
+        [self.followersCount setHidden:YES];
+        [self.followers setHidden:YES];
+        [self.following setHidden:YES];
+    }
+    
+    self.userNameLabel.text = user.screenName;
+    if ([user.screenName  isEqual: @"@(null)"]) {
+        self.userNameLabel.text = user.email;
+    }
+    
+    self.aboutLabel.text = user.status;
+    if (!user.status) {
+        self.aboutLabel.text = user.location;
+    }
+    [self.navigationItem setTitle:[user name]];
     
 }
-
-- (void)twitterProfileReceived:(NSDictionary *)jsonResponse {
-    self.profile = [[TwitterProfile alloc] initWithJSON:jsonResponse];
-//    [_nameLabel setText:[self.profile name]];
-    [_aboutLabel setText:[self.profile descriptionLabel]];
-}
-
-//- (void)loadInfoWithSession:(TWTRSession *)session {
-//    [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
-//        if (user) {
-//            NSLog(@"%@", [user profileImageMiniURL]);
-//            NSLog(@"%@", [user screenName]);
-//            NSLog(@"%@", [user name]);
-//            NSLog(@"%@", [user formattedScreenName]);
-//
-//
-//            NSString *screnNameString = [user screenName];
-//            NSString *nameString = [user name];
-//            NSString *formatString = [user formattedScreenName];
-//
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//                //Profile Image
-//                NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:profileImageUrl]];
-//                UIImage *image = [UIImage imageWithData:imageData];
-//
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [_profileImage setImage:image];
-//                    [_nameLabel setText:nameString];
-//                });
-//            });
-//        }
-//    }];
-//
-//}
 
 #pragma mark - Private
 - (void)setupViewConstraints {
@@ -358,9 +363,7 @@
                             @"scrollView":self.scrollView,
                             @"profileImage":self.profileImage,
                             @"banner" : self.bannerImage,
-                            @"nameLabel":self.nameLabel,
                             @"aboutLabel":self.aboutLabel,
-                            @"logoutButton":self.logoutButton,
                             @"user":self.userNameLabel,
                             @"followers":self.followers,
                             @"following":self.following,
@@ -371,36 +374,20 @@
     //---------------------------
     // Scroll View
     //---------------------------
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[scrollView]|"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|"
-                                                                      options:kNilOptions
-                                                                      metrics:nil
-                                                                        views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|[scrollView]|" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[scrollView]|" options:kNilOptions metrics:nil views:views]];
     
     //---------------------------
     // Profile Image
     //---------------------------
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
-    //    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.profileImage
-    //                                                          attribute:NSLayoutAttributeCenterX
-    //                                                          relatedBy:NSLayoutRelationEqual
-    //                                                             toItem:self.scrollView
-    //                                                          attribute:NSLayoutAttributeCenterX
-    //                                                         multiplier:1.0
-    //                                                           constant:0.0]];
-    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
     
     //-----------------------------
     // Banner Image
     //-----------------------------
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerImage attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[banner(115)]" options:kNilOptions metrics:nil views:views]];
-    
-    
     
 //    //---------------------------
 //    // Name Label
@@ -427,13 +414,13 @@
     // User Name
     //--------------------------
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-15-[user(200)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-113-[user(32)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-123-[user(32)]" options:kNilOptions metrics:nil views:views]];
     
     //--------------------------
     // About Label
     //--------------------------
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-10-[aboutLabel(300)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImage]-42-[aboutLabel(60)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-150-[aboutLabel(60)]" options:kNilOptions metrics:nil views:views]];
     //    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.aboutLabel
     //                                                          attribute:NSLayoutAttributeCenterX
     //                                                          relatedBy:NSLayoutRelationEqual
@@ -445,71 +432,80 @@
     //------------------------
     // Followers
     //------------------------
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-40-[followerCount(40)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[followerCount(22)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-120-[followingCount(40)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-20-[followingCount(22)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-40-[followers(100)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-35-[followers(22)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-120-[following(100)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-35-[following(22)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-50-[followerCount(40)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-120-[followerCount(22)]" options:kNilOptions metrics:nil views:views]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-140-[followingCount(40)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-120-[followingCount(22)]" options:kNilOptions metrics:nil views:views]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-50-[followers(100)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-135-[followers(22)]" options:kNilOptions metrics:nil views:views]];
+    
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[profileImage]-140-[following(100)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-135-[following(22)]" options:kNilOptions metrics:nil views:views]];
     
     
     
     //------------------------
     // Logout Button
     //------------------------
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0f constant:self.view.bounds.size.height-120]];
 //    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-[logoutButton]-|" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0f constant:self.view.bounds.size.height-120]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:0.0f]];
-    
-     
-    
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[logoutButton]-10-|" options:kNilOptions metrics:nil views:views]];
-//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
-//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.logoutButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0]];
-//    
-////    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|--[logoutButton(42)]-44-|" options:kNilOptions metrics:nil views:views]];
     
 }
 
 
 
 #pragma mark - Actions
-- (void)editProfile:(id)sender {
-    
-}
 
 - (void)logout:(id)sender {
-    TWTRSession *session = [[Twitter sharedInstance] session];
-    if (session) {
-        [[Twitter sharedInstance] logOut];
-        [TwitterKit logOut];
-        [self signOut:nil];
-    }
-    
-    
+    [self signOut:nil];
 }
 
 - (void)signOut:(id)sender {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign Out" message:@"Are you sure you want to sign out of Y55?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Sign Out", nil];
     [alert show];
-    
-    
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex !=1) {
         return;
     }
-    [self.navigationItem setTitle:@""];
-    _profileImage.image = [UIImage new];
-//    _nameLabel.text = @"Name";
-    _aboutLabel.text = @"Description";
-    
-    AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-    appDelegate.window.rootViewController = nav;
+    [[Y55User sharedInstance] logout];
+    self.bannerImage.image = [UIImage imageNamed:@"profile-bg"];
+    self.profileImage.image = [UIImage new];
+//    self.aboutLabel.text = @"";
+    self.nameLabel.text = @"";
+    self.followersCount.text = @"";
+    self.followingCount.text = @"";
+    self.userNameLabel.text = @"";
+}
+
+- (void)_checkUser {
+    if ([[Y55User sharedInstance] isLoggedIn]) {
+        AppDelegate *delegate = [AppDelegate sharedAppDelegate];
+        delegate.window.rootViewController = delegate.tabBarController;
+        [delegate.tabBarController setSelectedIndex:0];
+    }
+    else {
+        NSLog(@"Y55AppDelegate User is not logged in");
+        if (!self.loginViewController) {
+            self.loginViewController = [[LoginViewController alloc] init];
+        }
+        AppDelegate *delegate = [AppDelegate sharedAppDelegate];
+        delegate.window.rootViewController = self.loginViewController;
+    }
+}
+
+#pragma mark - Preferences
+- (void)preferencesDidChange {
+    [UIApplication sharedApplication].idleTimerDisabled = [[NSUserDefaults standardUserDefaults] boolForKey:kY55DisableSleepKey];
+    [self updateTimerPaused:nil];
+}
+
+- (void)updateTimerPaused:(NSNotification *)notification {
+    BOOL active = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
+    self.autoRefreshing = active && [[NSUserDefaults standardUserDefaults] boolForKey:kY55AutomaticallyRefresh];
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MoreViewController : UIViewController
+@interface MoreViewController : MainViewController
 @property (nonatomic, copy) UIImageView *bannerImage;
 @property (nonatomic, copy) UIImageView *profileImage;
 

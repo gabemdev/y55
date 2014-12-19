@@ -7,6 +7,7 @@
 //
 
 #import "MoreViewController.h"
+#import "MainViewController.h"
 
 @interface MoreViewController ()
 
@@ -19,7 +20,7 @@
 - (UIImageView *)bannerImage {
     if (!_bannerImage) {
         _bannerImage = [[UIImageView alloc] initWithImage:[UIImage new]];
-        _bannerImage.backgroundColor = [UIColor y55_blueColor];
+        _bannerImage.backgroundColor = [UIColor y55_greenColor];
         [_bannerImage setFrame:CGRectMake(0.0f, 0.0f, 300.0f, 160.0f)];
         _bannerImage.clipsToBounds = YES;
         _bannerImage.translatesAutoresizingMaskIntoConstraints = NO;
@@ -43,12 +44,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    [self.navigationItem setTitle:@"More"];
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 120.0f, self.view.bounds.size.width, 0.5)];
     lineView.backgroundColor = [UIColor y55_lightTextColor];
     
-    [self.view addSubview:self.bannerImage];
-    [self.view addSubview:self.profileImage];
+    [self.scrollView addSubview:self.bannerImage];
+    [self.scrollView addSubview:self.profileImage];
     [self getProfile];
     [self layoutConstraints];
     // Do any additional setup after loading the view.
@@ -114,11 +116,13 @@
     NSDictionary *views = @{@"profileImage" : self.profileImage,
                             @"banner" : self.bannerImage};
     
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-120-[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-10-[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
+    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.profileImage attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.profileImage attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.bannerImage attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[profileImage(80)]" options:kNilOptions metrics:nil views:views]];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerImage attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[banner(160)]" options:kNilOptions metrics:nil views:views]];
+    [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-30-[banner(160)]" options:kNilOptions metrics:nil views:views]];
     
 }
 

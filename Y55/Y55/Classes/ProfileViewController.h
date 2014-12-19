@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Y55User.h"
 
 @interface ProfileViewController : UIViewController<UIScrollViewDelegate, UINavigationControllerDelegate>
-
+@property (nonatomic, weak) Y55User *user;
 @property (nonatomic, copy) UIImageView *profileImage;
 @property (nonatomic, copy) UIImageView *bannerImage;
 @property (nonatomic, copy) UILabel *followers;
@@ -20,5 +21,11 @@
 @property (nonatomic) UITextView *aboutLabel;
 @property (nonatomic) UIButton *logoutButton;
 @property (nonatomic, copy) UILabel *nameLabel;
+@property (nonatomic) UIView *lineView;
+
+//Facebook
+@property (nonatomic, copy) UILabel *location;
+@property (nonatomic, copy) UILabel *email;
+
 
 @end

@@ -1,0 +1,15 @@
+# Uncomment this line to define a global platform for your project
+platform :ios, '8.0'
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'Y55' do
+pod 'SimpleAuth/Facebook'
+pod 'SimpleAuth/Twitter'
+pod 'SimpleAuth/LinkedInWeb'
+pod 'SAMGradientView'
+end
+
+target 'Y55Tests' do
+
+end
+

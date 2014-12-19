@@ -7,20 +7,27 @@
 //
 
 #import "AppDelegate.h"
-#import "TipsViewController.h"
 #import <Fabric/Fabric.h>
 #import <TwitterKit/TwitterKit.h>
 #import <Crashlytics/Crashlytics.h>
+#import "LocalyticsUtilities.h"
+#import "LocalyticsSession.h"
+
 #import "LoginViewController.h"
-#import "TasksViewController.h"
-#import "ProfileViewController.h"
-#import "AdvicesViewController.h"
+#import "FeedViewController.h"
+#import "NetworkViewController.h"
+#import "MainProfileViewController.h"
+#import "StatsViewController.h"
 #import "MoreViewController.h"
+#import <Accounts/Accounts.h>
+#import "Y55User.h"
 
 #import "UIColor+Y55.h"
+#import "CircleLoading.h"
 
 
 @interface AppDelegate ()
+@property (nonatomic) LoginViewController *loginViewController;
 
 @end
 
@@ -33,26 +40,31 @@
 #pragma mark - App Cycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     //Fabric
-    [[Twitter sharedInstance] startWithConsumerKey:Y55_TWITTER_CONSUMER_KEY
-                                    consumerSecret:Y55_TWITTER_CONSUMER_SECRET];
-    [Fabric with:@[CrashlyticsKit, [Twitter sharedInstance]]];
-//    [self accessTwitterAccount];
+    [Fabric with:@[CrashlyticsKit]];
+    [self configureAuthorizaionProviders];
+    
+    LLStartSession(@"c82a4d317ab6b56a26a1e92-f10d0106-80ec-11e4-291b-004a77f8b47f");
+    [[LocalyticsSession shared] LocalyticsSession:@"c82a4d317ab6b56a26a1e92-f10d0106-80ec-11e4-291b-004a77f8b47f"];
     
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [self _checkUser];
     
     //Ovverrides
     [self loadTabBar];
     [self loadAppearance];
     //RootView
-    _window.rootViewController = _tabBarController;
     _window.backgroundColor = [UIColor whiteColor];
     [_window makeKeyAndVisible];
+    [self updateRootVC];
+    
+    //Login
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRootVC) name:UserDidLoginNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateRootVC) name:UserDidLogoutNotification object:nil];
     
     //Defaults
     NSUserDefaults *standarDefaults = [NSUserDefaults standardUserDefaults];
     [standarDefaults registerDefaults:@{
-                                        
+                                        kY55AutomaticallyRefresh: @YES,
+                                        kY55DisableSleepKey: @NO
                                         }];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -74,30 +86,54 @@
     return YES;
 }
 
+- (void)updateRootVC
+{
+    if ([[Y55User sharedInstance] isLoggedIn]) {
+        NSLog(@"CPAppDelegate.application:didFinishLaunchingWithOptions: user is logged in");
+        [ProgressHUD showSuccess:[NSString stringWithFormat:@"Signed in!"]];
+        _window.rootViewController = _tabBarController;
+        
+    }
+    else {
+        NSLog(@"Y55AppDelegate User is not logged in");
+        if (!self.loginViewController) {
+            self.loginViewController = [[LoginViewController alloc] init];
+        }
+        [[Y55User sharedInstance] logout];
+        self.window.rootViewController = self.loginViewController;
+    }
+}
+
+
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    [[LocalyticsSession shared] close];
+    [[LocalyticsSession shared] upload];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [[LocalyticsSession shared] close];
+    [[LocalyticsSession shared] upload];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [[LocalyticsSession shared] resume];
+    [[LocalyticsSession shared] upload];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [self _checkUser];
+    [[LocalyticsSession shared] resume];
+    [[LocalyticsSession shared] upload];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[LocalyticsSession shared] close];
+    [[LocalyticsSession shared] upload];
 }
 
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:   (UIUserNotificationSettings *)notificationSettings
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     //register to receive notifications
     [application registerForRemoteNotifications];
@@ -113,58 +149,51 @@
     }
 }
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    // attempt to extract a token from the url
-    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
-}
 
 #pragma mark - UITabBarController
 - (void)loadTabBar {
     
     _tabBarController = [[UITabBarController alloc] init];
     
-    UIViewController *tips = [[TipsViewController alloc] init];
-    UINavigationController *tipsNavigationController = [[UINavigationController alloc] initWithRootViewController:tips];
-    [tipsNavigationController.navigationBar setTranslucent:NO];
+    UIViewController *feed = [[FeedViewController alloc] init];
+    UINavigationController *feedNavigationController = [[UINavigationController alloc] initWithRootViewController:feed];
+    [feedNavigationController.navigationBar setTranslucent:NO];
 //    tipsNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
-    [tipsNavigationController.tabBarItem setTitle:@"Feed"];
-    [tipsNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_purpleColor]} forState:UIControlStateSelected];
+    [feedNavigationController.tabBarItem setTitle:@"Feed"];
+//    [feedNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_purpleColor]} forState:UIControlStateSelected];
 //    [tips setTitle:@"Tips"];
     
-    UIViewController *tasks = [[TasksViewController alloc] init];
-    UINavigationController *taskNavigationController = [[UINavigationController alloc] initWithRootViewController:tasks];
-    [taskNavigationController.navigationBar setTranslucent:NO];
+    UIViewController *network = [[NetworkViewController alloc] init];
+    UINavigationController *networkNavigationController = [[UINavigationController alloc] initWithRootViewController:network];
+    [networkNavigationController.navigationBar setTranslucent:NO];
 //    taskNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
-    [taskNavigationController.tabBarItem setTitle:@"Network"];
+    [networkNavigationController.tabBarItem setTitle:@"Network"];
     
-    UIViewController *profile = [[ProfileViewController alloc] init];
+    UIViewController *profile = [[MainProfileViewController alloc] init];
     UINavigationController *profileNavigationController = [[UINavigationController alloc] initWithRootViewController:profile];
     [profileNavigationController.navigationBar setTranslucent:NO];
 //    profileNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
     [profileNavigationController.tabBarItem setTitle:@"Profile"];
-    [profileNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_blueColor]} forState:UIControlStateSelected];
+//    [profileNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_blueColor]} forState:UIControlStateSelected];
     
-    UIViewController *advice = [[AdvicesViewController alloc] init];
-    UINavigationController *adviceNavigationController = [[UINavigationController alloc] initWithRootViewController:advice];
-    [adviceNavigationController.navigationBar setTranslucent:NO];
+    UIViewController *stats = [[StatsViewController alloc] init];
+    UINavigationController *statsNavigationController = [[UINavigationController alloc] initWithRootViewController:stats];
+    [statsNavigationController.navigationBar setTranslucent:NO];
 //    adviceNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
-    [adviceNavigationController.tabBarItem setTitle:@"Stats"];
-    [adviceNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_greenColor]} forState:UIControlStateSelected];
+    [statsNavigationController.tabBarItem setTitle:@"Stats"];
+//    [statsNavigationController.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_greenColor]} forState:UIControlStateSelected];
     
     UIViewController *more = [[MoreViewController alloc] init];
     UINavigationController *moreNavigationController = [[UINavigationController alloc] initWithRootViewController:more];
     [moreNavigationController.navigationBar setTranslucent:NO];
 //    moreNavigationController.navigationBar.barTintColor = [UIColor y55_blueColor];
     [moreNavigationController.tabBarItem setTitle:@"More"];
-    [more.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_yellowColor]} forState:UIControlStateSelected];
+//    [more.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_yellowColor]} forState:UIControlStateSelected];
     
     
-    [[self.tabBarController.tabBar.items objectAtIndex:0] setTitle:@"Tips" forState:UIControlStateNormal];
+    _tabBarController.viewControllers = @[feedNavigationController, networkNavigationController, profileNavigationController, statsNavigationController, moreNavigationController];
     
-    _tabBarController.viewControllers = @[tipsNavigationController, taskNavigationController, profileNavigationController, adviceNavigationController, moreNavigationController];
+    [_tabBarController setSelectedIndex:0];
 }
 
 #pragma mark - Appearance
@@ -179,7 +208,7 @@
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.barStyle = UIBarStyleBlack;
     navigationBar.barTintColor = [UIColor y55_blueColor];
-    navigationBar.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5f];
+    navigationBar.tintColor = [UIColor colorWithWhite:1.0 alpha:1.0f];
     navigationBar.titleTextAttributes =@{
                                          NSForegroundColorAttributeName: [UIColor whiteColor],
                                          NSFontAttributeName: [UIFont fontWithName:@"Avenir-Heavy" size:20.0]
@@ -194,7 +223,7 @@
     UITabBarItem *tabBarItem = [UITabBarItem appearance];
     [tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_darkTextColor],
                                          NSFontAttributeName: [UIFont fontWithName:@"Avenir-Light" size:14.0f]} forState:UIControlStateNormal];
-    [tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_orangeColor]} forState:UIControlStateSelected];
+    [tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor y55_blueColor]} forState:UIControlStateSelected];
     [tabBarItem setTitlePositionAdjustment:UIOffsetMake(0.0, -13.0)];
 }
 
@@ -214,21 +243,49 @@
 
 
 - (void)_checkUser {
-    TWTRSession *session = [[Twitter sharedInstance] session];
-    if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded || session) {
-        if (session) {
-            [self accessTwitterAccount];
-        } else {
-            //Facebook stuff
-            
+    if ([[Y55User sharedInstance] isLoggedIn]) {
+        NSLog(@"CPAppDelegate.application:didFinishLaunchingWithOptions: user is logged in");
+        [ProgressHUD showSuccess:[NSString stringWithFormat:@"Welcome back!"]];
+        _window.rootViewController = _tabBarController;
+        [_tabBarController setSelectedIndex:0];
+    }
+    else {
+        NSLog(@"Y55AppDelegate User is not logged in");
+        [[Y55User sharedInstance] logout];
+        if (!self.loginViewController) {
+            self.loginViewController = [[LoginViewController alloc] init];
         }
-    } else {
-        AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-        appDelegate.window.rootViewController = nav;
+        self.window.rootViewController = self.loginViewController;
     }
 }
 
+#pragma mark - Private
+
+- (void)configureAuthorizaionProviders {
+    
+    // consumer_key and consumer_secret are required
+    SimpleAuth.configuration[@"twitter"] = @{
+                                             @"consumer_key" : @"XSYNXCM3aD7ZRqzjLjRiDMS8G",
+                                             @"consumer_secret" : @"TxEEeRY4TKV6mnEGiUyFGIYJOoIQIFgRPwRIZ54Y6iRtOwlTvK"
+                                             };
+    
+    // app_id is required
+    SimpleAuth.configuration[@"facebook"] = @{
+                                              @"app_id"  : @"313589268843231"
+                                              };
+    
+    // client_id, client_secret, and redirect_uri are required
+    SimpleAuth.configuration[@"linkedin-web"] = @{
+                                                  @"client_id": @"78uf7g26obbpkv",
+                                                  @"client_secret": @"tFnezVOXVTaaIKXX",
+                                                  @"redirect_uri": @"http://www.y55happy.com/ios/"};
+    
+    SimpleAuth.configuration[@"google-web"] = @{
+                                               @"client_id": @"739097956061-61oqbh8cuuo8btt1p2c85kegu5gclfcv.apps.googleusercontent.com",
+                                               @"client_secret": @"uK8B_KK8F6R_WJXKaLij4Bx6",
+                                               @"redirect_uri": @"http://localhost"
+                                               };
+}
 
 -(void)showError:(NSString*)errorMessage{
     
@@ -242,31 +299,7 @@
     });
 }
 
-- (void)accessTwitterAccount {
-    TWTRSession *session = [[Twitter sharedInstance] session];
-    if (session) {
-        [[[Twitter sharedInstance] APIClient] loadUserWithID:[session userID] completion:^(TWTRUser *user, NSError *error) {
-            if (user) {
-                [ProgressHUD showSuccess:[NSString stringWithFormat:@"Welcome back %@!", [user name]]];
-//                [_tabBarController setSelectedIndex:0];
-                ProfileViewController *viewController = [[ProfileViewController alloc] init];
-                NSString *imageString = [user profileImageLargeURL];
-                NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageString]];
-                UIImage *image = [UIImage imageWithData:imageData];
-                [viewController.profileImage setImage:image];
-                [viewController.nameLabel setText:[user name]];
-                [viewController.navigationItem setTitle:[user name]];
-                
-            }
-        }];
-    } else {
-        NSLog(@"No Session, please sign up");
-        AppDelegate *appDelegate = [AppDelegate sharedAppDelegate];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-        appDelegate.window.rootViewController = nav;
-    }
-    return;
-    
-}
+
+
 
 @end

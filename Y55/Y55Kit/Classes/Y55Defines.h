@@ -13,8 +13,8 @@
 @import Foundation;
 
 extern NSString *const kY55AutomaticallyRefresh;
-
 extern NSString *const kY55RoundTableDidChangeNotificationName;
+extern NSString *const kY55DisableSleepKey;
 
 
 

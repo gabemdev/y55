@@ -8,19 +8,24 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginViewController.h"
+#import "TwitterAdapter.h"
+
+@class ACAccount;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, FBLoginViewDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
-@property (nonatomic) UITabBarController *tabBarController;
-
 + (AppDelegate *)sharedAppDelegate;
 
-@property (nonatomic) TWTRSession *mainSession;
-@property (nonatomic) TWTRUser *mainUser;
+
+@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic) UITabBarController *tabBarController;
+- (void)_checkUser;
+
+//Social
+@property (nonatomic)NSString *accessToken;
+-(void)showError:(NSString*)errorMessage;
 
 
-- (void)accessTwitterAccount;
 
 
 @end

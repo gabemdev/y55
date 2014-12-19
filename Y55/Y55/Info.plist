@@ -60,8 +60,6 @@
 	<string>Y55</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -76,5 +74,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

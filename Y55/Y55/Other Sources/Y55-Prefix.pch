@@ -13,15 +13,34 @@
 #endif
 
 #ifdef __OBJC__
-@import UIKit;
-@import Foundation;
+    @import UIKit;
+    @import Foundation;
+    #import "Y55Kit.h"
+    #import <TwitterKit/TwitterKit.h>
+    #import <FacebookSDK/FacebookSDK.h>
+    #import <Accounts/Accounts.h>
+    #import <Twitter/Twitter.h>
+    #import "LoginViewController.h"
+    #import "AppDelegate.h"
+    #import "GMHUDView.h"
+    #import "AFNetworking.h"
+    #import <SimpleAuth/SimpleAuth.h>
+    #import "Y55User.h"
+    #import "LocalyticsSession.h"
+    #import "GMDPTR.h"
+    #import "MainViewController.h"
 #endif
 
-#import "Y55Kit.h"
-#import <TwitterKit/TwitterKit.h>
-#import <FacebookSDK/FacebookSDK.h>
-#import <Accounts/Accounts.h>
-#import <Twitter/Twitter.h>
-#import "LoginViewController.h"
-#import "AppDelegate.h"
-#import "GMHUDView.h"
+
+
+#define kTwitterProfileImageKey @"user_profile_image"
+#define kTwitterBannerImageKey @"user_banner_image"
+
+
+#define kFacebookProfileImageKey @"user_profile_image"
+#define kFacebookBannerImageKey @"user_banner_image"
+
+#define kFacebookProfileTypePage @"Page"
+#define kFacebookProfileTypePersonal @"Personal"
+
+#define kSocialAccountTypeKey @"SOCIAL_ACCOUNT_TYPE"

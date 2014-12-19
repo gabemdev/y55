@@ -11,8 +11,8 @@
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
 
 NSString *const kY55AutomaticallyRefresh = @"Y55AutomaticallyRefresh";
-
 NSString *const kY55RoundTableDidChangeNotificationName = @"Y55RoundTableDidChangeNotificationName";
+NSString *const kY55DisableSleepKey = @"Y55DisableSleep";
 
 
 #pragma mark - Parse Constants
