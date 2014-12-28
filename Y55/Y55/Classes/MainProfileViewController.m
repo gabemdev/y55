@@ -142,7 +142,7 @@
     
     self.profile.status.text = user.status;
     if (!user.status) {
-        self.profile.status.text = user.location;
+        self.profile.status.text = [NSString stringWithFormat:@"From: %@",user.location];
     }
     
     self.profile.nameLabel.text = user.name;

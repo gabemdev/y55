@@ -99,7 +99,6 @@
         if (!self.loginViewController) {
             self.loginViewController = [[LoginViewController alloc] init];
         }
-        [[Y55User sharedInstance] logout];
         self.window.rootViewController = self.loginViewController;
     }
 }
@@ -251,7 +250,6 @@
     }
     else {
         NSLog(@"Y55AppDelegate User is not logged in");
-        [[Y55User sharedInstance] logout];
         if (!self.loginViewController) {
             self.loginViewController = [[LoginViewController alloc] init];
         }

@@ -14,6 +14,7 @@
 @synthesize profileImage = _profileImage;
 @synthesize nameLabel = _nameLabel;
 @synthesize status = _status;
+@synthesize location = _location;
 
 
 - (UIImageView *)profileImage {
