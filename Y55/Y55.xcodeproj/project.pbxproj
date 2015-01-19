@@ -43,6 +43,7 @@
 		6D5233C01A295695008B4C9B /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D5233BF1A295695008B4C9B /* Social.framework */; };
 		6D52E5181A2EB9C700808C0F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D52E5171A2EB9C700808C0F /* Images.xcassets */; };
 		6D6040041A2BD850001F2C35 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D6040031A2BD850001F2C35 /* FacebookSDK.framework */; };
+		6D6EFB021A57C16400CBB5DD /* FeedCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D6EFB011A57C16400CBB5DD /* FeedCollectionViewController.m */; };
 		6DA042161A2E1B1800AC80D4 /* MoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA042151A2E1B1800AC80D4 /* MoreViewController.m */; };
 		6DAF10841A3CCC960081E6D9 /* MainProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DAF10831A3CCC960081E6D9 /* MainProfile.m */; };
 		6DAF10921A3D387A0081E6D9 /* MainProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DAF10911A3D387A0081E6D9 /* MainProfileViewController.m */; };
@@ -138,6 +139,8 @@
 		6D5233BF1A295695008B4C9B /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		6D52E5171A2EB9C700808C0F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6D6040031A2BD850001F2C35 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		6D6EFB001A57C16400CBB5DD /* FeedCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedCollectionViewController.h; path = Classes/FeedCollectionViewController.h; sourceTree = "<group>"; };
+		6D6EFB011A57C16400CBB5DD /* FeedCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedCollectionViewController.m; path = Classes/FeedCollectionViewController.m; sourceTree = "<group>"; };
 		6DA042141A2E1B1800AC80D4 /* MoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoreViewController.h; path = Classes/MoreViewController.h; sourceTree = "<group>"; };
 		6DA042151A2E1B1800AC80D4 /* MoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MoreViewController.m; path = Classes/MoreViewController.m; sourceTree = "<group>"; };
 		6DAF10821A3CCC960081E6D9 /* MainProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainProfile.h; path = Classes/Views/MainProfile.h; sourceTree = "<group>"; };
@@ -259,6 +262,8 @@
 				6DA042151A2E1B1800AC80D4 /* MoreViewController.m */,
 				6D5233B61A26DB7B008B4C9B /* ProfileViewController.h */,
 				6D5233B71A26DB7B008B4C9B /* ProfileViewController.m */,
+				6D6EFB001A57C16400CBB5DD /* FeedCollectionViewController.h */,
+				6D6EFB011A57C16400CBB5DD /* FeedCollectionViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -694,6 +699,7 @@
 				6DAF10921A3D387A0081E6D9 /* MainProfileViewController.m in Sources */,
 				6D35AEDB1A393EB600A27982 /* StatsViewController.m in Sources */,
 				6D2D2AD11A3428FE00FF274E /* TwitterAdapter.m in Sources */,
+				6D6EFB021A57C16400CBB5DD /* FeedCollectionViewController.m in Sources */,
 				6D35AED21A393DFB00A27982 /* FeedViewController.m in Sources */,
 				6D5233571A268964008B4C9B /* UIButton+Y55.m in Sources */,
 				6DAF10D11A3EA6D30081E6D9 /* MainViewController.m in Sources */,
