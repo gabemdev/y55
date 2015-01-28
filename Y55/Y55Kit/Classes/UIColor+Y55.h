@@ -20,5 +20,6 @@
 + (instancetype)y55_redColor;
 + (instancetype)y55_yellowColor;
 + (instancetype)y55_lightTextColor;
++ (instancetype)y55_menuBar;
 
 @end

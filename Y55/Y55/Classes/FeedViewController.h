@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "MainViewController.h"
 
-@interface FeedViewController : MainViewController
+@interface FeedViewController : MainViewController<UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic) UITableView *table;
+@property (nonatomic) NSArray *items;
 
 
 @end

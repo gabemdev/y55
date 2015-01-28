@@ -13,6 +13,7 @@
 @property (nonatomic, copy) UILabel *nameLabel;
 @property (nonatomic, copy) UILabel *status;
 @property (nonatomic, copy) UILabel *location;
+@property (nonatomic) UIView *lineView;
 
 - (CGFloat)verticalSpacing;
 - (void)setupViews;

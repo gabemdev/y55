@@ -22,6 +22,10 @@
     return [self colorWithPatternImage:[UIImage imageNamed:@"bg_main"]];
 }
 
++ (instancetype)y55_menuBar {
+    return [self colorWithPatternImage:[UIImage imageNamed:@"Menubar"]];
+}
+
 + (instancetype)y55_textColor {
     return [self colorWithWhite:0.267f alpha:1.0f];
 }

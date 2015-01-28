@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4049718A5A97AD3D25254B80 /* libPods-Y55.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC5BF8C05D1C57DB947AAD3B /* libPods-Y55.a */; };
+		6D0BAAD41A7748FA00CAED07 /* FeedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0BAAD31A7748FA00CAED07 /* FeedModel.m */; };
+		6D0BAAD71A786A9F00CAED07 /* FeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0BAAD61A786A9F00CAED07 /* FeedCell.m */; };
 		6D2D2AD11A3428FE00FF274E /* TwitterAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2D2ACE1A3428FE00FF274E /* TwitterAdapter.m */; };
 		6D2D2AD21A3428FE00FF274E /* TwitterProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D2D2AD01A3428FE00FF274E /* TwitterProfile.m */; };
 		6D35AEBF1A37E25B00A27982 /* Y55User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D35AEBE1A37E25B00A27982 /* Y55User.m */; };
@@ -82,6 +84,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6D0BAAD21A7748FA00CAED07 /* FeedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedModel.h; path = Classes/Model/FeedModel.h; sourceTree = "<group>"; };
+		6D0BAAD31A7748FA00CAED07 /* FeedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedModel.m; path = Classes/Model/FeedModel.m; sourceTree = "<group>"; };
+		6D0BAAD51A786A9F00CAED07 /* FeedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FeedCell.h; path = Classes/Views/FeedCell.h; sourceTree = "<group>"; };
+		6D0BAAD61A786A9F00CAED07 /* FeedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FeedCell.m; path = Classes/Views/FeedCell.m; sourceTree = "<group>"; };
 		6D2D2ACD1A3428FE00FF274E /* TwitterAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterAdapter.h; sourceTree = "<group>"; };
 		6D2D2ACE1A3428FE00FF274E /* TwitterAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterAdapter.m; sourceTree = "<group>"; };
 		6D2D2ACF1A3428FE00FF274E /* TwitterProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterProfile.h; sourceTree = "<group>"; };
@@ -241,6 +247,8 @@
 				6D35AEC11A37EC9D00A27982 /* Y55APIClient.m */,
 				6DAF10CF1A3EA6D30081E6D9 /* MainViewController.h */,
 				6DAF10D01A3EA6D30081E6D9 /* MainViewController.m */,
+				6D0BAAD21A7748FA00CAED07 /* FeedModel.h */,
+				6D0BAAD31A7748FA00CAED07 /* FeedModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -275,6 +283,8 @@
 				6DAF10831A3CCC960081E6D9 /* MainProfile.m */,
 				6DAF10D21A3F9A1B0081E6D9 /* ProfileTest.h */,
 				6DAF10D31A3F9A1B0081E6D9 /* ProfileTest.m */,
+				6D0BAAD51A786A9F00CAED07 /* FeedCell.h */,
+				6D0BAAD61A786A9F00CAED07 /* FeedCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -684,6 +694,7 @@
 				6DAF109D1A3E9BC10081E6D9 /* GMDPTRView.m in Sources */,
 				6D35AEBF1A37E25B00A27982 /* Y55User.m in Sources */,
 				6DAF10841A3CCC960081E6D9 /* MainProfile.m in Sources */,
+				6D0BAAD71A786A9F00CAED07 /* FeedCell.m in Sources */,
 				6DAF10C71A3E9BF00081E6D9 /* ProgressHUD.m in Sources */,
 				6DAF10B91A3E9BD20081E6D9 /* AFURLSessionManager.m in Sources */,
 				6D5233481A268061008B4C9B /* Y55Defines.m in Sources */,
@@ -691,6 +702,7 @@
 				6DAF10B81A3E9BD20081E6D9 /* AFURLResponseSerialization.m in Sources */,
 				6DAF10B11A3E9BD20081E6D9 /* AFHTTPRequestOperation.m in Sources */,
 				6D52331D1A267A4D008B4C9B /* AppDelegate.m in Sources */,
+				6D0BAAD41A7748FA00CAED07 /* FeedModel.m in Sources */,
 				6DAF10B71A3E9BD20081E6D9 /* AFURLRequestSerialization.m in Sources */,
 				6D5233721A26962E008B4C9B /* LoginViewController.m in Sources */,
 				6D52331A1A267A4D008B4C9B /* main.m in Sources */,

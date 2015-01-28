@@ -1,6 +1,6 @@
 # Y55 Happy iOS App
 
-### Dec 2 Update
+### Jan 28 Update
 
 ## Contributing to this project
 If you have feature requests or bug reports, feel free to help out by sending pull requests or by [creating new issues](https://github.com/gabemdev/GMDCircleLoader/issues/new). 
@@ -16,9 +16,7 @@ GMDCircleLoader is brought to you by [Gabe Morales](http://gabemdev.com) and [co
 ## Screen Shots
 
 ![LoginView](https://cldup.com/Q5vtaSakAI.png)
-![TipsView](https://cldup.com/vJYaCiANJM.png)
-![TasksView](https://cldup.com/70rnWR_LwS.png)
-![ProfileView](https://cldup.com/Ps2FlBE3xZ.png)
-![AdvicesView](https://cldup.com/436VJREYV7.png)
+![FeedView](https://cldup.com/Gs2uevXnQL.png)
+![ProfileView](https://cldup.com/iQz8bZtIJp.png)
 
 

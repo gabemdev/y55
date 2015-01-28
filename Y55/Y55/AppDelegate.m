@@ -206,12 +206,12 @@
     
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.barStyle = UIBarStyleBlack;
-    navigationBar.barTintColor = [UIColor y55_blueColor];
-    navigationBar.tintColor = [UIColor colorWithWhite:1.0 alpha:1.0f];
-    navigationBar.titleTextAttributes =@{
-                                         NSForegroundColorAttributeName: [UIColor whiteColor],
-                                         NSFontAttributeName: [UIFont fontWithName:@"Avenir-Heavy" size:20.0]
-                                         };
+    [navigationBar setBackgroundImage:[UIImage imageNamed:@"Menubar"] forBarMetrics:UIBarMetricsDefault];
+    navigationBar.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5f];
+    navigationBar.titleTextAttributes = @{
+                                          NSForegroundColorAttributeName: [UIColor whiteColor],
+                                          NSFontAttributeName: [UIFont fontWithName:@"Avenir-Medium" size:20.0]
+                                          };
     
     UITabBar *tabBar = [UITabBar appearance];
     [tabBar setBarStyle:UIBarStyleDefault];

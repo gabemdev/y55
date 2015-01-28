@@ -23,8 +23,8 @@
         _backgroundView = [[SAMGradientView alloc] init];
         _backgroundView.translatesAutoresizingMaskIntoConstraints = NO;
         _backgroundView.gradientColors = @[
-                                           [UIColor y55_blueColor],
-                                           [UIColor y55_purpleColor]
+                                           [UIColor whiteColor],
+                                           [UIColor whiteColor]
                                            ];
         _backgroundView.dimmedGradientColors = _backgroundView.gradientColors;
     }
@@ -45,19 +45,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.tintColor = [UIColor y55_blueColor];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    [self.navigationController.navigationBar setTranslucent:YES];
-    self.navigationController.view.backgroundColor = [UIColor clearColor];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
+//    self.navigationController.navigationBar.shadowImage = [UIImage new];
+//    [self.navigationController.navigationBar setTranslucent:YES];
+//    self.navigationController.view.backgroundColor = [UIColor clearColor];
     
     SAMGradientView *gradient = [[SAMGradientView alloc] initWithFrame:self.view.bounds];
     gradient.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     gradient.gradientColors = @[
-                                [UIColor y55_blueColor],
-                                [UIColor y55_purpleColor]
+                                [UIColor whiteColor],
+                                [UIColor whiteColor]
                                 ];
     gradient.gradientLocations = @[@0.5f, @0.51f];
     gradient.dimmedGradientColors = gradient.gradientColors;
@@ -69,8 +69,8 @@
     gradient.backgroundColor = [UIColor clearColor];
     gradient.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     gradient.gradientColors = @[
-                                [UIColor y55_blueColor],
-                                [[UIColor y55_blueColor] colorWithAlphaComponent:0.0]
+                                [UIColor whiteColor],
+                                [[UIColor whiteColor] colorWithAlphaComponent:0.0]
                                 ];
     gradient.gradientLocations = @[@0.6f, @1];
     gradient.dimmedGradientColors = gradient.gradientColors;
