@@ -82,7 +82,7 @@
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[table]|"
                                                                       options:kNilOptions metrics:nil
                                                                         views:viewDict]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[table]|"
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[table]|"
                                                                       options:kNilOptions metrics:nil
                                                                         views:viewDict]];
 
@@ -127,20 +127,22 @@
     FeedModel *two = [[FeedModel alloc] init];
     FeedModel *three = [[FeedModel alloc] init];
     FeedModel *four = [[FeedModel alloc] init];
+    FeedModel *five = [[FeedModel alloc] init];
+    FeedModel *six = [[FeedModel alloc] init];
     
     [one initWithTitle:@"Richard"
              cellImage:@"no-user"
       notificationIcon:@"email"
      notificationTitle:@"has sent you a private message!"
      notificationColor:@"green"
-               andTime:@"@11:41am Today"];
+               andTime:@"@ 11:41am Today"];
     
     [two initWithTitle:@"Gabriel"
              cellImage:@"no-user"
       notificationIcon:@"email"
      notificationTitle:@"has sent you a private message!"
      notificationColor:@"green"
-               andTime:@"@11:38am Today"];
+               andTime:@"@ 11:38am Today"];
     
     [three initWithTitle:@"Jessica"
                cellImage:@"no-user"
@@ -154,9 +156,23 @@
        notificationIcon:@"check"
       notificationTitle:@"Accepted your gift!"
       notificationColor:@"orange"
-                andTime:@"@5:41pm Monday"];
+                andTime:@"@ 5:41pm Monday"];
+
+    [five initWithTitle:@"Sophia"
+              cellImage:@"no-user"
+       notificationIcon:@"check"
+      notificationTitle:@"Accepted your advice"
+      notificationColor:@"green"
+                andTime:@"@ 6:04pm Saturday"];
+
+    [six initWithTitle:@"Gilda"
+             cellImage:@"no-user"
+      notificationIcon:@"email"
+     notificationTitle:@"has sent you a private message!"
+     notificationColor:@"orange"
+               andTime:@"@ 12:15am Sunday"];
     
-    self.items = @[one, two, three, four];
+    self.items = @[one, two, three, four, five, six];
 }
 
 @end

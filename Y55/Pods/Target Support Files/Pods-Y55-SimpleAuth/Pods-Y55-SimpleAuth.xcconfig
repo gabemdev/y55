@@ -1,0 +1,1 @@
+PODS_Y___SIMPLEAUTH_OTHER_LDFLAGS = -framework "Accounts" -framework "Social" -framework "UIKit"

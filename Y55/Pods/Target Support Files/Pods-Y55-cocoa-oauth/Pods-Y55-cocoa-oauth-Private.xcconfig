@@ -1,0 +1,5 @@
+#include "Pods-Y55-cocoa-oauth.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Build" "${PODS_ROOT}/Headers/Build/cocoa-oauth" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/CMDQueryStringSerialization" "${PODS_ROOT}/Headers/Public/ISO8601" "${PODS_ROOT}/Headers/Public/NSData+Base64" "${PODS_ROOT}/Headers/Public/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/ReactiveCocoa/ReactiveCocoa" "${PODS_ROOT}/Headers/Public/SAMGradientView" "${PODS_ROOT}/Headers/Public/SimpleAuth" "${PODS_ROOT}/Headers/Public/cocoa-oauth"
+OTHER_LDFLAGS = -ObjC
+PODS_ROOT = ${SRCROOT}

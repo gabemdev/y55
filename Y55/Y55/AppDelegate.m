@@ -206,7 +206,7 @@
     
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     navigationBar.barStyle = UIBarStyleBlack;
-    [navigationBar setBackgroundImage:[UIImage imageNamed:@"Menubar"] forBarMetrics:UIBarMetricsDefault];
+    [navigationBar setBackgroundImage:[UIImage imageNamed:@"navBar"] forBarMetrics:UIBarMetricsDefault];
     navigationBar.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5f];
     navigationBar.titleTextAttributes = @{
                                           NSForegroundColorAttributeName: [UIColor whiteColor],
